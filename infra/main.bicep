@@ -12,7 +12,6 @@ targetScope = 'subscription'
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
 import * as settings from './types/settings.bicep'
 
-
 //=============================================================================
 // Parameters
 //=============================================================================
@@ -82,105 +81,20 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
-module keyVault 'modules/services/key-vault.bicep' = {
-  name: 'keyVault'
+module services 'modules/services.bicep' = {
+  name: 'services'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
-    keyVaultName: keyVaultName
-  }
-}
-
-module storageAccount 'modules/services/storage-account.bicep' = {
-  name: 'storageAccount'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
-    storageAccountName: storageAccountName
-  }
-}
-
-module appInsights 'modules/services/app-insights.bicep' = {
-  name: 'appInsights'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
+    apiManagementSettings: apiManagementSettings
     appInsightsSettings: appInsightsSettings
-  }
-}
-
-module apiManagement 'modules/services/api-management.bicep' = {
-  name: 'apiManagement'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
-    apiManagementSettings: apiManagementSettings
-    appInsightsName: appInsightsSettings.appInsightsName
-    keyVaultName: keyVaultName
-  }
-  dependsOn: [
-    appInsights
-    keyVault
-  ]
-}
-
-module functionApp 'modules/services/function-app.bicep' = {
-  name: 'functionApp'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
     functionAppSettings: functionAppSettings
-    apiManagementSettings: apiManagementSettings
-    appInsightsName: appInsightsSettings.appInsightsName
-    keyVaultName: keyVaultName
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    appInsights
-    keyVault
-    storageAccount
-  ]
-}
-
-module logicApp 'modules/services/logic-app.bicep' = {
-  name: 'logicApp'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
     logicAppSettings: logicAppSettings
-    apiManagementSettings: apiManagementSettings
-    appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
-  dependsOn: [
-    appInsights
-    keyVault
-    storageAccount
-  ]
 }
-
-module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToDeployer'
-  scope: resourceGroup
-  params: {
-    principalId: deployer().objectId
-    isAdmin: true
-    keyVaultName: keyVaultName
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    keyVault
-    storageAccount
-  ]
-}
-
 
 //=============================================================================
 // Outputs
