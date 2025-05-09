@@ -85,7 +85,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
 
 module entraId 'modules/entra-id.bicep' = {
   name: 'entraId'
-  scope: resourceGroup
   params: {
     tenantId: subscription().tenantId
     tags: tags
@@ -95,6 +94,7 @@ module entraId 'modules/entra-id.bicep' = {
 }
 
 var deployServices = false
+
 module services 'modules/services.bicep' = if (deployServices) {
   name: 'services'
   scope: resourceGroup
@@ -113,6 +113,10 @@ module services 'modules/services.bicep' = if (deployServices) {
 //=============================================================================
 // Outputs
 //=============================================================================
+
+// Return names of the Entra ID resources
+output ENTRA_ID_APIM_APPLICATION_NAME string = apiManagementSettings.serviceName
+output ENTRA_ID_APIM_CLIENT_NAME string = clientName
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
