@@ -45,11 +45,7 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   uniqueName: clientName
   displayName: clientName
   description: clientName
-  web: {
-    implicitGrantSettings: {
-      enableIdTokenIssuance: true
-    }
-  }
+  
   requiredResourceAccess: [
     {
       resourceAppId: apimAppRegistration.appId
