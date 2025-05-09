@@ -10,7 +10,7 @@ function Remove-ApplicationAndServicePrincipal($uniqueName) {
         $sp = az ad sp list --all | ConvertFrom-Json | Where-Object { $_.appId -eq $app.appId }
         
         if ($sp) {
-            Write-Host "Deleting service principal $($app.id) of application with unique name $uniqueName"
+            Write-Host "Deleting service principal $($sp.id) of application with unique name $uniqueName"
             # Delete the service principal (moves the service principal to the deleted items)
             az ad sp delete --id $sp.id
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
@@ -20,7 +20,7 @@ function Remove-ApplicationAndServicePrincipal($uniqueName) {
             Write-Host "Unable to delete service princpal for application with unique name $uniqueName. Service principal not found."
         }
 
-        Write-Host "Deleting application $($app.appId) with unique name $uniqueName"
+        Write-Host "Deleting application $($app.id) with unique name $uniqueName"
         # Delete the application (moves the application to the deleted items)
         az ad app delete --id $app.id
         # Permanently delete the application. If we don't do this, we can't create a new application with the same name.
