@@ -9,6 +9,12 @@
 extension microsoftGraphV1
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import * as helpers from '../../functions/helpers.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -26,7 +32,7 @@ param apiManagementServiceName string
 //=============================================================================
 
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  tags: map(items(tags), tag => tag.value)
+  tags: helpers.flattenTags(tags)
   
   uniqueName: apiManagementServiceName
   displayName: apiManagementServiceName

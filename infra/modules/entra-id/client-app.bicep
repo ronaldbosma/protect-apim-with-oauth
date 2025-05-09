@@ -9,6 +9,12 @@
 extension microsoftGraphV1
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import * as helpers from '../../functions/helpers.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -34,7 +40,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
 //=============================================================================
 
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  tags: map(items(tags), tag => tag.value)
+  tags: helpers.flattenTags(tags)
   
   uniqueName: clientName
   displayName: clientName

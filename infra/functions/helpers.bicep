@@ -28,3 +28,8 @@ func getQueueStorageEndpoint(storageAccountName string) string => 'https://${sto
 
 @export()
 func getTableStorageEndpoint(storageAccountName string) string => 'https://${storageAccountName}.table.${environment().suffixes.storage}'
+
+// Tags
+
+@export()
+func flattenTags(tags object) string[] => map(items(tags), tag => '${tag.key}: ${tag.value}')
