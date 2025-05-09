@@ -36,7 +36,6 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   
   uniqueName: apiManagementServiceName
   displayName: apiManagementServiceName
-  description: apiManagementServiceName
 
   identifierUris: [
     'api://${apiManagementServiceName}'
@@ -66,28 +65,9 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
       deployer().objectId
     ]
   }
-  signInAudience: 'AzureADMyOrg'
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
-  displayName: apiManagementServiceName
-  description: apiManagementServiceName
-
   appId: apimAppRegistration.appId
-  appDisplayName: apimAppRegistration.displayName
-  appDescription: apimAppRegistration.description
-  
-  accountEnabled: true
   appRoleAssignmentRequired: true
-
-  owners: {
-    relationships: [
-      deployer().objectId
-    ]
-  }
-  // servicePrincipalNames: apimAppRegistration.identifierUris
-  // servicePrincipalType: 'string'
-  // tags: [
-  //   'string'
-  // ]
 }

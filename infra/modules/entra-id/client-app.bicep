@@ -44,8 +44,7 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   
   uniqueName: clientName
   displayName: clientName
-  description: clientName
-  
+
   requiredResourceAccess: [
     {
       resourceAppId: apimAppRegistration.appId
@@ -67,22 +66,8 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
       deployer().objectId
     ]
   }
-  signInAudience: 'AzureADMyOrg'
 }
 
-resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
-  displayName: clientName
-  description: clientName
-
+resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
-  // appDisplayName: clientAppRegistration.displayName
-  // appDescription: clientAppRegistration.description
-  
-  accountEnabled: true
-
-  owners: {
-    relationships: [
-      deployer().objectId
-    ]
-  }
 }

@@ -44,4 +44,7 @@ module clientApp 'entra-id/client-app.bicep' = {
     apiManagementAppName: apiManagementServiceName
     clientName: clientName
   }
+  dependsOn: [
+    apiManagementApp
+  ]
 }
