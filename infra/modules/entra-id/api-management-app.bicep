@@ -1,5 +1,5 @@
 //=============================================================================
-// API Management App Registration & Service Principal
+// API Management App Registration with App roles & Service Principal
 //=============================================================================
 
 //=============================================================================
@@ -58,6 +58,14 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
       allowedMemberTypes: [ 'Application' ]
       isEnabled: true
     }
+    {
+      id: guid(tenantId, 'Sample.Delete')
+      description: 'Sample delete application role'
+      displayName: 'Sample.Delete'
+      value: 'Sample.Delete'
+      allowedMemberTypes: [ 'Application' ]
+      isEnabled: true
+    }
   ]
 
   owners: {
@@ -69,5 +77,5 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
-  appRoleAssignmentRequired: true
+  appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
 }
