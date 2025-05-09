@@ -81,7 +81,17 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
-module services 'modules/services.bicep' = {
+module entraId 'modules/entra-id.bicep' = {
+  name: 'entraId'
+  scope: resourceGroup
+  params: {
+    tenantId: subscription().tenantId
+    apiManagementServiceName: apiManagementSettings.serviceName
+  }
+}
+
+var deployServices = false
+module services 'modules/services.bicep' = if (deployServices) {
   name: 'services'
   scope: resourceGroup
   params: {
