@@ -50,6 +50,8 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
+var clientName = getResourceName('client', environmentName, location, instanceId)
+
 var functionAppSettings = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
   appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
@@ -86,7 +88,9 @@ module entraId 'modules/entra-id.bicep' = {
   scope: resourceGroup
   params: {
     tenantId: subscription().tenantId
+    tags: tags
     apiManagementServiceName: apiManagementSettings.serviceName
+    clientName: clientName
   }
 }
 

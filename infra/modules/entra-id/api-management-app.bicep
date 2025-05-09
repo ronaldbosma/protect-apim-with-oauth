@@ -15,6 +15,9 @@ extension microsoftGraphV1
 @description('The ID of the tenant')
 param tenantId string
 
+@description('The tags to associate with the resource')
+param tags object
+
 @description('The name of the API Management Service')
 param apiManagementServiceName string
 
@@ -23,7 +26,7 @@ param apiManagementServiceName string
 //=============================================================================
 
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  tags: [ 'tag-1', 'tag-2' ]
+  tags: map(items(tags), tag => tag.value)
   
   uniqueName: apiManagementServiceName
   displayName: apiManagementServiceName
@@ -65,8 +68,8 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   description: apiManagementServiceName
 
   appId: apimAppRegistration.appId
-  appDisplayName: apiManagementServiceName
-  appDescription: apiManagementServiceName
+  appDisplayName: apimAppRegistration.displayName
+  appDescription: apimAppRegistration.description
   
   accountEnabled: true
   appRoleAssignmentRequired: true
