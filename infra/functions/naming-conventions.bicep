@@ -121,6 +121,7 @@ func getPrefixMap() object => {
   webApp: 'app' 
   
   // Custom prefixes not specified on the Microsoft site
+  appRegistration: 'appreg'
   client: 'client'
   webtest: 'webtest'
 }

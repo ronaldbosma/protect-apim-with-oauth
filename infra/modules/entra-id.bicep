@@ -20,6 +20,9 @@ param tenantId string
 @description('The tags to associate with the resource')
 param tags object
 
+@description('The name of the API Management app registration in Entra ID')
+param apimAppRegistrationName string
+
 @description('The name of the API Management Service')
 param apiManagementServiceName string
 
@@ -35,6 +38,7 @@ module apiManagementApp 'entra-id/api-management-app.bicep' = {
   params: {
     tenantId: tenantId
     tags: tags
+    appRegistrationName: apimAppRegistrationName
     apiManagementServiceName: apiManagementServiceName
   }
 }
@@ -43,7 +47,7 @@ module clientApp 'entra-id/client-app.bicep' = {
   name: 'clientApp'
   params: {
     tags: tags
-    apiManagementAppName: apiManagementServiceName
+    apimAppRegistrationName: apimAppRegistrationName
     clientName: clientName
   }
   dependsOn: [

@@ -50,7 +50,8 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var clientName = getResourceName('client', environmentName, location, instanceId)
+var apimAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
+var clientName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
 var functionAppSettings = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
@@ -88,6 +89,7 @@ module entraId 'modules/entra-id.bicep' = {
   params: {
     tenantId: subscription().tenantId
     tags: tags
+    apimAppRegistrationName: apimAppRegistrationName
     apiManagementServiceName: apiManagementSettings.serviceName
     clientName: clientName
   }

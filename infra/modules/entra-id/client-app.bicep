@@ -23,8 +23,8 @@ import * as helpers from '../../functions/helpers.bicep'
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The name of the API Management application')
-param apiManagementAppName string
+@description('The name of the API Management app registration')
+param apimAppRegistrationName string
 
 @description('The name of the client')
 param clientName string
@@ -34,7 +34,7 @@ param clientName string
 //=============================================================================
 
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
-  uniqueName: apiManagementAppName
+  uniqueName: apimAppRegistrationName
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
