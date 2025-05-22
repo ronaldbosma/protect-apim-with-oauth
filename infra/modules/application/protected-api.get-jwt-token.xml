@@ -1,0 +1,39 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Verify that the JWT token was issued by the correct app registration and that the client has the Sample.Read role. -->
+        <validate-jwt header-name="Authorization">
+            <openid-config url="https://login.microsoftonline.com/{{tenant-id}}/v2.0/.well-known/openid-configuration" />
+            <audiences>
+                <audience>{{jwt-audience}}</audience>
+            </audiences>
+            <required-claims>
+                <claim name="roles" match="any">
+                    <value>Sample.Read</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+
+        <!-- 
+            Return the JWT token that was received in the Authorization header.
+            Don't do this in a real world scenario, as it would expose the token to the client.
+         -->
+        <return-response>
+            <set-status code="200" />
+            <set-body>@(context.Request.Headers.GetValueOrDefault("Authorization"))</set-body>
+        </return-response>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>

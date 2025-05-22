@@ -111,6 +111,20 @@ module services 'modules/services.bicep' = if (deployServices) {
 }
 
 //=============================================================================
+// Application Resources
+//=============================================================================
+
+module protectedApi 'modules/application/protected-api.bicep' = {
+  name: 'protectedApi'
+  scope: resourceGroup
+  params: {
+    apiManagementServiceName: apiManagementSettings.serviceName
+    tenantId: subscription().tenantId
+    jwtAudience: 'api://${apiManagementSettings.serviceName}'
+  }
+}
+
+//=============================================================================
 // Outputs
 //=============================================================================
 
