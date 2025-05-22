@@ -93,9 +93,7 @@ module entraId 'modules/entra-id.bicep' = {
   }
 }
 
-var deployServices = false
-
-module services 'modules/services.bicep' = if (deployServices) {
+module services 'modules/services.bicep' = {
   name: 'services'
   scope: resourceGroup
   params: {
