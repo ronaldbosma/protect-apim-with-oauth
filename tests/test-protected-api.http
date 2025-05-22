@@ -1,3 +1,7 @@
+#=============================================================================
+# Test requests for the Protected API
+#=============================================================================
+
 # Get a token from Entra ID
 # @name getToken
 POST https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token HTTP/1.1
