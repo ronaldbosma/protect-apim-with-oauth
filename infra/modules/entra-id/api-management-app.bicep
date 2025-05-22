@@ -43,6 +43,10 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
     'api://${apiManagementServiceName}'
   ]
 
+  api: {
+    requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
+  }
+
   appRoles: [
     {
       id: guid(tenantId, 'Sample.Read')
