@@ -21,7 +21,13 @@
          -->
         <return-response>
             <set-status code="200" />
-            <set-body>@(context.Request.Headers.GetValueOrDefault("Authorization"))</set-body>
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                var jwt = context.Request.Headers.GetValueOrDefault("Authorization").AsJwt();
+                return JsonConvert.SerializeObject(jwt);
+            }</set-body>
         </return-response>
     </inbound>
 
