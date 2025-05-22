@@ -11,3 +11,5 @@ client_id={{clientId}}&client_secret={{clientSecret}}&grant_type=client_credenti
 # Call GET on Protected API
 GET https://{{apimHostname}}/protected HTTP/1.1
 Authorization: Bearer {{getToken.response.body.access_token}}
+Ocp-Apim-Subscription-Key: {{apimSubscriptionKey}}
+Ocp-Apim-Trace: true
