@@ -4,6 +4,9 @@
 
         <!-- Forward requests to the protected. -->
         <set-backend-service base-url="https://apim-oauth-sample-sdc-jgo3s.azure-api.net/protected" />
+
+        <!-- Use the API Management system-assigned managed identity to get a JWT token. -->
+        <authentication-managed-identity resource="{{oauth-scope}}" />
     </inbound>
 
     <backend>
@@ -18,6 +21,15 @@
     </outbound>
 
     <on-error>
+        <!-- 
+            Return info about the error so we can see why it happened.
+            Don't do this in a real world scenario, as it might reveal too much information.
+        -->
+        <set-header name="Content-Type" exists-action="override">
+            <value>application/json</value>
+        </set-header>
+        <set-body>@(JsonConvert.SerializeObject(context.LastError))</set-body>
+
         <base />
     </on-error>
 </policies>

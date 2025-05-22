@@ -21,6 +21,19 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Resources
 //=============================================================================
 
+// Named Values
+
+resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'oauth-scope'
+  parent: apiManagementService
+  properties: {
+    displayName: 'oauth-scope'
+    value: 'api://${apiManagementServiceName}'
+  }
+}
+
+// API
+
 resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
   name: 'unprotected-api'
   parent: apiManagementService
