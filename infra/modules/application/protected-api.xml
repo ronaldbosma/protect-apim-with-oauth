@@ -53,6 +53,20 @@
     </outbound>
 
     <on-error>
+        <!-- 
+            Return info about the error we can see why it happened.
+            Don't do this in a real world scenario, as it might reveal too much information.
+        -->
+        <set-header name="ErrorSource" exists-action="override">
+            <value>@(context.LastError.Source)</value>
+        </set-header>
+        <set-header name="ErrorReason" exists-action="override">
+            <value>@(context.LastError.Reason)</value>
+        </set-header>
+        <set-header name="ErrorMessage" exists-action="override">
+            <value>@(context.LastError.Message)</value>
+        </set-header>
+
         <base />
     </on-error>
 </policies>
