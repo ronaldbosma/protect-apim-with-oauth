@@ -85,3 +85,9 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: apimAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output appId string = apimAppRegistration.appId

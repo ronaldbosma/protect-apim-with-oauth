@@ -50,3 +50,9 @@ module clientApp 'entra-id/client-app.bicep' = {
     apiManagementApp
   ]
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output apiManagementAppId string = apiManagementApp.outputs.appId

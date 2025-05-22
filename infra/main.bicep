@@ -120,7 +120,7 @@ module protectedApi 'modules/application/protected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
     tenantId: subscription().tenantId
-    jwtAudience: 'api://${apiManagementSettings.serviceName}'
+    jwtAudience: entraId.outputs.apiManagementAppId
   }
 }
 
