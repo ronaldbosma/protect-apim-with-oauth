@@ -1,0 +1,23 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Forward requests to the protected. -->
+        <set-backend-service base-url="https://apim-oauth-sample-sdc-jgo3s.azure-api.net/protected" />
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+        <set-header name="BackendRequestUrl" exists-action="override">
+            <value>@(context.Request.Url.ToString())</value>
+        </set-header>
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>
