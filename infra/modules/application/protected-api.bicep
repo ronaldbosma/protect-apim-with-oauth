@@ -60,21 +60,39 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' 
     ]
     subscriptionRequired: false // API is protected with OAuth
   }
-
-  resource operations 'operations' = {
-    name: 'get-jwt-token'
+  
+  resource policies 'policies' = {
+    name: 'policy'
     properties: {
-      displayName: 'Get JWT token'
+      format: 'rawxml'
+      value: loadTextContent('protected-api.xml')
+    }
+  }
+
+  resource getOperation 'operations' = {
+    name: 'get'
+    properties: {
+      displayName: 'Get'
       method: 'GET'
       urlTemplate: '/'
     }
+  }
 
-    resource policies 'policies' = {
-      name: 'policy'
-      properties: {
-        format: 'rawxml'
-        value: loadTextContent('protected-api.get-jwt-token.xml')
-      }
+  resource postOperation 'operations' = {
+    name: 'post'
+    properties: {
+      displayName: 'Post'
+      method: 'POST'
+      urlTemplate: '/'
+    }
+  }
+
+  resource deleteOperation 'operations' = {
+    name: 'delete'
+    properties: {
+      displayName: 'Delete'
+      method: 'DELETE'
+      urlTemplate: '/'
     }
   }
 
