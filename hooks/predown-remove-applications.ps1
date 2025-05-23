@@ -1,7 +1,12 @@
 # The Azure Developer CLI doesn't support deleting Entra ID resources yet, so we have to do it in a hook.
 # Related GitHub issue: https://github.com/Azure/azure-dev/issues/4724
 
-function Remove-ApplicationAndServicePrincipal($uniqueName) {
+function Remove-ApplicationAndServicePrincipal($uniqueName){
+    if ([string]::IsNullOrWhiteSpace($uniqueName)) {
+        Write-Host "No unique name provided. Skipping deletion of application and service principal."
+        return
+    }
+
     # Get the application with the unique name
     $app = az ad app list | ConvertFrom-Json | Where-Object { $_.uniqueName -eq $uniqueName }
 
