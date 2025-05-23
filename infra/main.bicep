@@ -82,8 +82,8 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
-module apiManagementApp 'modules/entra-id/api-management-app.bicep' = {
-  name: 'apiManagementApp'
+module apimAppRegistration 'modules/entra-id/api-management-app.bicep' = {
+  name: 'apimAppRegistration'
   params: {
     tenantId: subscription().tenantId
     tags: tags
@@ -92,14 +92,14 @@ module apiManagementApp 'modules/entra-id/api-management-app.bicep' = {
   }
 }
 
-module clientApp 'modules/entra-id/client-app.bicep' = {
-  name: 'clientApp'
+module clientAppRegistration 'modules/entra-id/client-app.bicep' = {
+  name: 'clientAppRegistration'
   params: {
     tags: tags
     clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
-    apiManagementApp
+    apimAppRegistration
   ]
 }
 
@@ -110,8 +110,8 @@ module assignClientAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
     clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
-    clientApp
-    apiManagementApp
+    clientAppRegistration
+    apimAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement 
@@ -196,7 +196,7 @@ module protectedApi 'modules/application/protected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
     tenantId: subscription().tenantId
-    jwtAudience: apiManagementApp.outputs.appId
+    jwtAudience: apimAppRegistration.outputs.appId
   }
   dependsOn: [
     apiManagement
