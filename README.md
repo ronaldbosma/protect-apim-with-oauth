@@ -21,7 +21,9 @@ Before you can deploy this template, make sure you have the following tools inst
   _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
   _(This template has several hooks: one to build the custom .NET code project for the Logic App using a prepackage hook, and a predown hook to permanently delete the log analytics workspace to prevent issues with future deployments.)_
-- You need Owner or Contributor permissions on an Azure Subscription to deploy this template.  
+- You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
+- You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
+  _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
 
 ### Deployment
 
