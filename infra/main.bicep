@@ -97,8 +97,8 @@ module clientAppRegistration 'modules/entra-id/client-app.bicep' = {
   ]
 }
 
-module assignClientAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
-  name: 'assignClientAppRoles'
+module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
+  name: 'assignAppRolesToClient'
   params: {
     apimAppRegistrationName: apimAppRegistrationName
     clientAppRegistrationName: clientAppRegistrationName
