@@ -7,7 +7,9 @@ hooks:
   predown:
     - shell: pwsh
       run: ./hooks/predown-remove-applications.ps1
+      interactive: true
     - shell: pwsh
       run: ./hooks/predown-remove-law.ps1
+      interactive: true
 requiredVersions: 
   azd: ">= 1.12.0"  # azd version 1.12.0 or later is required because of the use of the Bicep deployer() function
