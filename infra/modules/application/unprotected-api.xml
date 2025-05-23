@@ -6,7 +6,7 @@
         <set-backend-service base-url="https://apim-oauth-sample-sdc-jgo3s.azure-api.net/protected" />
 
         <!-- Use the API Management system-assigned managed identity to get a JWT token. -->
-        <authentication-managed-identity resource="{{oauth-scope}}" />
+        <authentication-managed-identity resource="{{oauth-target-resource}}" />
     </inbound>
 
     <backend>

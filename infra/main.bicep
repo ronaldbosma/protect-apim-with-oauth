@@ -209,7 +209,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
-    appRegistrationIdentifierUri: apiManagementSettings.appRegistrationIdentifierUri
+    oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
   }
   dependsOn: [
     apiManagement

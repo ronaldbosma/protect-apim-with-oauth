@@ -9,8 +9,8 @@
 @description('The name of the API Management service')
 param apiManagementServiceName string
 
-@description('The identifier URI for the API Management app registration')
-param appRegistrationIdentifierUri string
+@description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
+param oauthTargetResource string
 
 //=============================================================================
 // Existing resources
@@ -26,12 +26,12 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 
 // Named Values
 
-resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'oauth-scope'
+resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'oauth-target-resource'
   parent: apiManagementService
   properties: {
-    displayName: 'oauth-scope'
-    value: appRegistrationIdentifierUri
+    displayName: 'oauth-target-resource'
+    value: oauthTargetResource
   }
 }
 
