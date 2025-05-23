@@ -20,7 +20,7 @@ Before you can deploy this template, make sure you have the following tools inst
 - [npm CLI](https://nodejs.org/) 
   _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
-  _(This template has several hooks: one to build the custom .NET code project for the Logic App using a prepackage hook, and a predown hook to permanently delete the log analytics workspace to prevent issues with future deployments.)_
+  _(This template has several hooks. See [this section](#hooks) for more information.)_
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
@@ -60,6 +60,20 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 ```cmd
 azd down --purge
 ```
+
+## Hooks
+
+This template has several hooks that are executed at different stages of the deployment process. The following hooks are included:
+
+- [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
+  This PowerShell script is executed before the resources are removed. 
+  It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
+  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
+  
+- [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
+  This PowerShell script is executed before the resources are removed. 
+  It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when deploying the template multiple times.
 
 
 ## Troubleshooting
