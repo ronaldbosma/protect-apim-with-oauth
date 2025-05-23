@@ -5,8 +5,10 @@ metadata:
   template: protect-apim-with-oauth@0.0.1
 hooks:
   predown:
-    shell: pwsh
-    run: ./hooks/predown.ps1
+    - shell: pwsh
+      run: ./hooks/predown-remove-applications.ps1
+    - shell: pwsh
+      run: ./hooks/predown-remove-law.ps1
   postdown:
     shell: pwsh
     run: ./hooks/postdown.ps1
