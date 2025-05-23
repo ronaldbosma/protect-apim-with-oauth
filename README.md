@@ -40,7 +40,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
     azd auth login
     ```
 
-1. Run the `azd up` command to provision the resources in your Azure subscription. This deployment will typically take around 4 minutes to complete.
+1. Run the `azd up` command to provision the resources in your Azure subscription and Entra ID tenant. This deployment will typically take around 4 minutes to complete.
 
     ```cmd
     azd up
