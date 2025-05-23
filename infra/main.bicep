@@ -93,18 +93,72 @@ module entraId 'modules/entra-id.bicep' = {
   }
 }
 
-module services 'modules/services.bicep' = {
-  name: 'services'
+module storageAccount 'modules/services/storage-account.bicep' = {
+  name: 'storageAccount'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    storageAccountName: storageAccountName
+  }
+}
+
+module appInsights 'modules/services/app-insights.bicep' = {
+  name: 'appInsights'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    appInsightsSettings: appInsightsSettings
+  }
+}
+
+module apiManagement 'modules/services/api-management.bicep' = {
+  name: 'apiManagement'
   scope: resourceGroup
   params: {
     location: location
     tags: tags
     apiManagementSettings: apiManagementSettings
-    appInsightsSettings: appInsightsSettings
+    appInsightsName: appInsightsSettings.appInsightsName
+  }
+  dependsOn: [
+    appInsights
+  ]
+}
+
+module functionApp 'modules/services/function-app.bicep' = {
+  name: 'functionApp'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
     functionAppSettings: functionAppSettings
-    logicAppSettings: logicAppSettings
+    apiManagementSettings: apiManagementSettings
+    appInsightsName: appInsightsSettings.appInsightsName
     storageAccountName: storageAccountName
   }
+  dependsOn: [
+    appInsights
+    storageAccount
+  ]
+}
+
+module logicApp 'modules/services/logic-app.bicep' = {
+  name: 'logicApp'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    logicAppSettings: logicAppSettings
+    apiManagementSettings: apiManagementSettings
+    appInsightsName: appInsightsSettings.appInsightsName
+    storageAccountName: storageAccountName
+  }
+  dependsOn: [
+    appInsights
+    storageAccount
+  ]
 }
 
 //=============================================================================
