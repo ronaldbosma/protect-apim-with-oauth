@@ -77,7 +77,7 @@ var tags = {
 // Resources
 //=============================================================================
 
-module apimAppRegistration 'modules/entra-id/api-management-app.bicep' = {
+module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
   name: 'apimAppRegistration'
   params: {
     tenantId: subscription().tenantId
@@ -87,7 +87,7 @@ module apimAppRegistration 'modules/entra-id/api-management-app.bicep' = {
   }
 }
 
-module clientAppRegistration 'modules/entra-id/client-app.bicep' = {
+module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
   name: 'clientAppRegistration'
   params: {
     tags: tags
