@@ -22,7 +22,7 @@
         <validate-jwt header-name="Authorization">
             <openid-config url="https://login.microsoftonline.com/{{tenant-id}}/v2.0/.well-known/openid-configuration" />
             <audiences>
-                <audience>{{jwt-audience}}</audience>
+                <audience>{{oauth-audience}}</audience>
             </audiences>
             <required-claims>
                 <claim name="roles" match="any">

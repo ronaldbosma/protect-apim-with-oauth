@@ -12,8 +12,8 @@ param apiManagementServiceName string
 @description('The ID of the tenant')
 param tenantId string
 
-@description('The expected audience for the JWT token')
-param jwtAudience string
+@description('The expected OAuth audience for the JWT token')
+param oauthAudience string
 
 //=============================================================================
 // Existing resources
@@ -38,12 +38,12 @@ resource tenantIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
   }
 }
 
-resource jwtAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'jwt-audience'
+resource oauthAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'oauth-audience'
   parent: apiManagementService
   properties: {
-    displayName: 'jwt-audience'
-    value: jwtAudience
+    displayName: 'oauth-audience'
+    value: oauthAudience
   }
 }
 
@@ -98,6 +98,6 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' 
 
   dependsOn: [
     tenantIdNamedValue
-    jwtAudienceNamedValue
+    oauthAudienceNamedValue
   ]
 }

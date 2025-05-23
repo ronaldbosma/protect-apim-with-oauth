@@ -196,7 +196,7 @@ module protectedApi 'modules/application/protected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
     tenantId: subscription().tenantId
-    jwtAudience: apimAppRegistration.outputs.appId
+    oauthAudience: apimAppRegistration.outputs.appId
   }
   dependsOn: [
     apiManagement
