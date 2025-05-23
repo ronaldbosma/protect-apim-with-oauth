@@ -52,7 +52,8 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
+var validClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
+var invalidClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
 
 var tags = {
   'azd-env-name': environmentName
@@ -73,29 +74,42 @@ module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
   }
 }
 
-module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
-  name: 'clientAppRegistration'
+// This client is 'valid' because it will have app roles assigned to it.
+module validClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+  name: 'validClientAppRegistration'
   params: {
     tags: tags
-    name: clientAppRegistrationName
+    name: validClientAppRegistrationName
   }
   dependsOn: [
     apimAppRegistration
   ]
 }
 
-module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToClient'
+module assignAppRolesToValidClient 'modules/entra-id/assign-app-roles.bicep' = {
+  name: 'assignAppRolesToValidClient'
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
-    clientAppRegistrationName: clientAppRegistrationName
+    clientAppRegistrationName: validClientAppRegistrationName
   }
   dependsOn: [
-    clientAppRegistration
     apimAppRegistration
+    validClientAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement 
+  ]
+}
+
+// This client is 'invalid' because it will not have app roles assigned to it.
+module invalidClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+  name: 'invalidClientAppRegistration'
+  params: {
+    tags: tags
+    name: invalidClientAppRegistrationName
+  }
+  dependsOn: [
+    apimAppRegistration
   ]
 }
 
@@ -153,8 +167,10 @@ module protectedApi 'modules/application/protected-api.bicep' = {
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
-output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
-output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
+output ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_NAME string = validClientAppRegistrationName
+output ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID string = validClientAppRegistration.outputs.appId
+output ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_NAME string = invalidClientAppRegistrationName
+output ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID string = invalidClientAppRegistration.outputs.appId
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
