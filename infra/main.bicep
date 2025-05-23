@@ -173,6 +173,9 @@ module protectedApi 'modules/application/protected-api.bicep' = {
     tenantId: subscription().tenantId
     jwtAudience: entraId.outputs.apiManagementAppId
   }
+  dependsOn: [
+    apiManagement
+  ]
 }
 
 module unprotectedApi 'modules/application/unprotected-api.bicep' = {
@@ -181,6 +184,9 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
   }
+  dependsOn: [
+    apiManagement
+  ]
 }
 
 //=============================================================================
