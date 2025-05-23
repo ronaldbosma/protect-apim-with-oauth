@@ -5,7 +5,7 @@
 # Permanently deleting the Log Analytics workspace seems to fix this issue.
 #
 # A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
-#   if it's already in the soft-deleted state after azd has removed it
+#   if it's already in the soft-deleted state after azd has removed it.
 
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
