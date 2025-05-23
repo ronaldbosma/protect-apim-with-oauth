@@ -134,8 +134,8 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 //=============================================================================
 
 // Return names of the Entra ID resources
-output ENTRA_ID_APIM_APPLICATION_NAME string = apimAppRegistrationName
-output ENTRA_ID_APIM_CLIENT_NAME string = clientName
+output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apimAppRegistrationName
+output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientName
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
