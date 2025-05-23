@@ -27,7 +27,7 @@ param tenantId string
 param tags object
 
 @description('The name of the API Management app registration in Entra ID')
-param apimAppRegistrationName string
+param name string
 
 @description('The identifier URI for the API Management app registration')
 param identifierUri string
@@ -39,8 +39,8 @@ param identifierUri string
 resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   tags: helpers.flattenTags(tags)
   
-  uniqueName: apimAppRegistrationName
-  displayName: apimAppRegistrationName
+  uniqueName: name
+  displayName: name
 
   identifierUris: [ identifierUri ]
 

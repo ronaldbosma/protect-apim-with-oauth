@@ -24,7 +24,7 @@ import * as helpers from '../../functions/helpers.bicep'
 param tags object
 
 @description('The name of the client app registration')
-param clientAppRegistrationName string
+param name string
 
 //=============================================================================
 // Functions
@@ -40,8 +40,8 @@ func getAppRoleIdByValue(appRoles array, value string) string =>
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   tags: helpers.flattenTags(tags)
   
-  uniqueName: clientAppRegistrationName
-  displayName: clientAppRegistrationName
+  uniqueName: name
+  displayName: name
 
   owners: {
     relationships: [

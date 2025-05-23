@@ -82,7 +82,7 @@ module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
   params: {
     tenantId: subscription().tenantId
     tags: tags
-    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    name: apiManagementSettings.appRegistrationName
     identifierUri: apiManagementSettings.appRegistrationIdentifierUri
   }
 }
@@ -91,7 +91,7 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
   name: 'clientAppRegistration'
   params: {
     tags: tags
-    clientAppRegistrationName: clientAppRegistrationName
+    name: clientAppRegistrationName
   }
   dependsOn: [
     apimAppRegistration
