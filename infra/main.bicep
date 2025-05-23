@@ -222,6 +222,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
+output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
 
