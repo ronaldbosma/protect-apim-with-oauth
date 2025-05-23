@@ -65,8 +65,6 @@ var logicAppSettings = {
   netFrameworkVersion: 'v9.0'
 }
 
-var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
-
 var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
 
 var tags = {
@@ -105,7 +103,6 @@ module services 'modules/services.bicep' = {
     appInsightsSettings: appInsightsSettings
     functionAppSettings: functionAppSettings
     logicAppSettings: logicAppSettings
-    keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
 }
@@ -144,7 +141,6 @@ output ENTRA_ID_APIM_CLIENT_NAME string = clientName
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
 output AZURE_FUNCTION_APP_NAME string = functionAppSettings.functionAppName
-output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
 output AZURE_LOGIC_APP_NAME string = logicAppSettings.logicAppName
 output AZURE_RESOURCE_GROUP string = resourceGroupName

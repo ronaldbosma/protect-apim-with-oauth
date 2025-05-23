@@ -27,9 +27,6 @@ param appInsightsSettings settings.appInsightsSettingsType
 @description('The settings for the Function App that will be created')
 param functionAppSettings settings.functionAppSettingsType
 
-@description('The name of the Key Vault that will be created')
-param keyVaultName string
-
 @description('The settings for the Logic App that will be created')
 param logicAppSettings settings.logicAppSettingsType
 
@@ -39,15 +36,6 @@ param storageAccountName string
 //=============================================================================
 // Resources
 //=============================================================================
-
-module keyVault 'services/key-vault.bicep' = {
-  name: 'keyVault'
-  params: {
-    location: location
-    tags: tags
-    keyVaultName: keyVaultName
-  }
-}
 
 module storageAccount 'services/storage-account.bicep' = {
   name: 'storageAccount'
@@ -74,11 +62,9 @@ module apiManagement 'services/api-management.bicep' = {
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
-    keyVaultName: keyVaultName
   }
   dependsOn: [
     appInsights
-    keyVault
   ]
 }
 
@@ -90,12 +76,10 @@ module functionApp 'services/function-app.bicep' = {
     functionAppSettings: functionAppSettings
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
-    keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
-    keyVault
     storageAccount
   ]
 }
@@ -108,26 +92,10 @@ module logicApp 'services/logic-app.bicep' = {
     logicAppSettings: logicAppSettings
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
-    keyVaultName: keyVaultName
     storageAccountName: storageAccountName
   }
   dependsOn: [
     appInsights
-    keyVault
-    storageAccount
-  ]
-}
-
-module assignRolesToDeployer 'shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToDeployer'
-  params: {
-    principalId: deployer().objectId
-    isAdmin: true
-    keyVaultName: keyVaultName
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    keyVault
     storageAccount
   ]
 }

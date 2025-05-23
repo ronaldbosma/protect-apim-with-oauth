@@ -28,9 +28,6 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by the Logic App')
 param appInsightsName string
 
-@description('The name of the Key Vault that will contain the secrets')
-param keyVaultName string
-
 @description('Name of the storage account that will be used by the Logic App')
 param storageAccountName string
 
@@ -62,7 +59,6 @@ var appSettings = {
 
   // API Management App Settings
   ApiManagement_gatewayUrl: helpers.getApiManagementGatewayUrl(apiManagementSettings.serviceName)
-  ApiManagement_subscriptionKey: helpers.getKeyVaultSecretReference(keyVaultName, 'logic-app-subscription-key')
 }
 
 //=============================================================================
@@ -121,18 +117,6 @@ resource logicApp 'Microsoft.Web/sites@2024-04-01' = {
 }
 
 
-// Assign roles to system-assigned identity of Logic App
-
-module assignRolesToLogicAppSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToLogicAppSystemAssignedIdentity'
-  params: {
-    principalId: logicApp.identity.principalId
-    keyVaultName: keyVaultName
-    storageAccountName: storageAccountName
-  }
-}
-
-
 // Set standard App Settings
 //  NOTE: this is done in a separate module that merges the app settings with the existing ones 
 //        to prevent other (manually) created app settings from being removed.
@@ -144,7 +128,4 @@ module setLogicAppSettings '../shared/merge-app-settings.bicep' = {
     currentAppSettings: list('${logicApp.id}/config/appsettings', logicApp.apiVersion).properties
     newAppSettings: appSettings
   }
-  dependsOn: [
-    assignRolesToLogicAppSystemAssignedIdentity // App settings might be dependent on the logic app having access to e.g. Key Vault
-  ]
 }
