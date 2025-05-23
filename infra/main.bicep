@@ -51,7 +51,7 @@ var appInsightsSettings = {
 }
 
 var apimAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
-var clientName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
+var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
 var functionAppSettings = {
   functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
@@ -87,7 +87,7 @@ module apiManagementApp 'modules/entra-id/api-management-app.bicep' = {
   params: {
     tenantId: subscription().tenantId
     tags: tags
-    appRegistrationName: apimAppRegistrationName
+    apimAppRegistrationName: apimAppRegistrationName
     apiManagementServiceName: apiManagementSettings.serviceName
   }
 }
@@ -96,11 +96,25 @@ module clientApp 'modules/entra-id/client-app.bicep' = {
   name: 'clientApp'
   params: {
     tags: tags
-    apimAppRegistrationName: apimAppRegistrationName
-    clientName: clientName
+    clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
     apiManagementApp
+  ]
+}
+
+module assignClientAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
+  name: 'assignClientAppRoles'
+  params: {
+    apimAppRegistrationName: apimAppRegistrationName
+    clientAppRegistrationName: clientAppRegistrationName
+  }
+  dependsOn: [
+    clientApp
+    apiManagementApp
+    // Assignment of the app roles fails if we do this immediately after creating the app registrations.
+    // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
+    apiManagement 
   ]
 }
 
@@ -206,7 +220,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apimAppRegistrationName
-output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientName
+output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName

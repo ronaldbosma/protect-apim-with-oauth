@@ -1,5 +1,5 @@
 //=============================================================================
-// Client App Registration, Service Principal and App Role Assignments
+// Client App Registration with Service Principal
 //=============================================================================
 
 targetScope = 'subscription'
@@ -23,23 +23,8 @@ import * as helpers from '../../functions/helpers.bicep'
 @description('The tags to associate with the resource')
 param tags object
 
-@description('The name of the API Management app registration')
-param apimAppRegistrationName string
-
-@description('The name of the client')
-param clientName string
-
-//=============================================================================
-// Existing Resources
-//=============================================================================
-
-resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
-  uniqueName: apimAppRegistrationName
-}
-
-resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
-  appId: apimAppRegistration.appId
-}
+@description('The name of the client app registration')
+param clientAppRegistrationName string
 
 //=============================================================================
 // Functions
@@ -55,8 +40,8 @@ func getAppRoleIdByValue(appRoles array, value string) string =>
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   tags: helpers.flattenTags(tags)
   
-  uniqueName: clientName
-  displayName: clientName
+  uniqueName: clientAppRegistrationName
+  displayName: clientAppRegistrationName
 
   owners: {
     relationships: [
@@ -67,16 +52,4 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
-}
-
-resource assignSampleRead 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
-  principalId: clientServicePrincipal.id
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Read')
-}
-
-resource assignSampleWrite 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
-  principalId: clientServicePrincipal.id
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Write')
 }
