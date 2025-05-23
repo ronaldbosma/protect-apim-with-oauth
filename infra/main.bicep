@@ -76,12 +76,6 @@ var tags = {
 // Resources
 //=============================================================================
 
-resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
-  name: resourceGroupName
-  location: location
-  tags: tags
-}
-
 module apimAppRegistration 'modules/entra-id/api-management-app.bicep' = {
   name: 'apimAppRegistration'
   params: {
@@ -116,6 +110,12 @@ module assignClientAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement 
   ]
+}
+
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
+  name: resourceGroupName
+  location: location
+  tags: tags
 }
 
 module storageAccount 'modules/services/storage-account.bicep' = {
