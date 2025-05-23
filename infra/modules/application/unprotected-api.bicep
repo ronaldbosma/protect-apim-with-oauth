@@ -9,6 +9,9 @@
 @description('The name of the API Management service')
 param apiManagementServiceName string
 
+@description('The identifier URI for the API Management app registration')
+param appRegistrationIdentifierUri string
+
 //=============================================================================
 // Existing resources
 //=============================================================================
@@ -28,7 +31,7 @@ resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-
   parent: apiManagementService
   properties: {
     displayName: 'oauth-scope'
-    value: 'api://${apiManagementServiceName}'
+    value: appRegistrationIdentifierUri
   }
 }
 

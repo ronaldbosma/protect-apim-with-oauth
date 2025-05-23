@@ -42,6 +42,8 @@ var apiManagementSettings = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
+  appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
+  appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
 
 var appInsightsSettings = {
@@ -50,7 +52,6 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var apimAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
 var functionAppSettings = {
@@ -81,8 +82,8 @@ module apimAppRegistration 'modules/entra-id/api-management-app.bicep' = {
   params: {
     tenantId: subscription().tenantId
     tags: tags
-    apimAppRegistrationName: apimAppRegistrationName
-    apiManagementServiceName: apiManagementSettings.serviceName
+    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    identifierUri: apiManagementSettings.appRegistrationIdentifierUri
   }
 }
 
@@ -100,7 +101,7 @@ module clientAppRegistration 'modules/entra-id/client-app.bicep' = {
 module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
   name: 'assignAppRolesToClient'
   params: {
-    apimAppRegistrationName: apimAppRegistrationName
+    apimAppRegistrationName: apiManagementSettings.appRegistrationName
     clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
@@ -208,6 +209,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
+    appRegistrationIdentifierUri: apiManagementSettings.appRegistrationIdentifierUri
   }
   dependsOn: [
     apiManagement
@@ -219,7 +221,7 @@ module unprotectedApi 'modules/application/unprotected-api.bicep' = {
 //=============================================================================
 
 // Return names of the Entra ID resources
-output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apimAppRegistrationName
+output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 
 // Return the names of the resources

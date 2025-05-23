@@ -29,8 +29,8 @@ param tags object
 @description('The name of the API Management app registration in Entra ID')
 param apimAppRegistrationName string
 
-@description('The name of the API Management Service')
-param apiManagementServiceName string
+@description('The identifier URI for the API Management app registration')
+param identifierUri string
 
 //=============================================================================
 // Resources
@@ -42,9 +42,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   uniqueName: apimAppRegistrationName
   displayName: apimAppRegistrationName
 
-  identifierUris: [
-    'api://${apiManagementServiceName}'
-  ]
+  identifierUris: [ identifierUri ]
 
   api: {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
