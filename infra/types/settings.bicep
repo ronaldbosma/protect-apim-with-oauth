@@ -34,35 +34,3 @@ type appInsightsSettingsType = {
   @description('Retention in days of the logging')
   retentionInDays: int
 }
-
-
-// Function App
-
-@description('The settings for the Function App')
-@export()
-type functionAppSettingsType = {
-  @description('The name of the Function App')
-  functionAppName: string
-
-  @description('The name of the App Service for the Function App')
-  appServicePlanName: string
-
-  @description('The .NET Framework version for the Function App')
-  netFrameworkVersion: string
-}
-
-
-// Logic App
-
-@description('The settings for the Logic App')
-@export()
-type logicAppSettingsType = {
-  @description('The name of the Logic App')
-  logicAppName: string
-
-  @description('The name of the App Service for the Logic App')
-  appServicePlanName: string
-
-  @description('The .NET Framework version for the Logic App')
-  netFrameworkVersion: string
-}

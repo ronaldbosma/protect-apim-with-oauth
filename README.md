@@ -16,9 +16,6 @@ Before you can deploy this template, make sure you have the following tools inst
   - Installing `azd` also installs the following tools:  
     - [GitHub CLI](https://cli.github.com)  
     - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
-- [.NET Core 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
-- [npm CLI](https://nodejs.org/) 
-  _(This template uses a workaround to deploy the Logic App workflow, which requires the npm CLI.)_
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
   _(This template has several hooks. See [this section](#hooks) for more information.)_
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
@@ -43,7 +40,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
     azd auth login
     ```
 
-1. Run the `azd up` command to provision the resources in your Azure subscription. This will deploy both the infrastructure and the sample application, and typically takes around 7 minutes to complete. _(Use `azd provision` to only deploy the infrastructure.)_
+1. Run the `azd up` command to provision the resources in your Azure subscription. This deployment will typically take around 4 minutes to complete.
 
     ```cmd
     azd up
@@ -101,53 +98,3 @@ Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azur
 ```cmd
 az apim deletedservice purge --location "swedencentral" --service-name "apim-oauth-sdc-hb7ze"
 ```
-
-### Function App deployment failed because of quota limitations
-
-If you already have a Consumption tier (`SKU=Y1`) Function App deployed in the same region, you may encounter the following error when deploying the template. This error occurs because you have reached the region's quota for your subscription.
-
-```json
-{
-  "code": "InvalidTemplateDeployment",
-  "message": "The template deployment 'functionApp' is not valid according to the validation procedure. The tracking id is '00000000-0000-0000-0000-000000000000'. See inner errors for details.",
-  "details": [
-    {
-      "code": "ValidationForResourceFailed",
-      "message": "Validation failed for a resource. Check 'Error.Details[0]' for more information.",
-      "details": [
-        {
-          "code": "SubscriptionIsOverQuotaForSku",
-          "message": "This region has quota of 1 instances for your subscription. Try selecting different region or SKU."
-        }
-      ]
-    }
-  ]
-}
-```
-
-Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.
-
-### Logic App deployment failed because of quota limitations
-
-If you already have a Workflow Standard WS1 tier (`SKU=WS1`) Logic App deployed in the same region, you may encounter the following error when deploying the template. This error occurs because you have reached the region's quota for your subscription.
-
-```json
-{
-  "code": "InvalidTemplateDeployment",
-  "message": "The template deployment 'logicApp' is not valid according to the validation procedure. The tracking id is '00000000-0000-0000-0000-000000000000'. See inner errors for details.",
-  "details": [
-    {
-      "code": "ValidationForResourceFailed",
-      "message": "Validation failed for a resource. Check 'Error.Details[0]' for more information.",
-      "details": [
-        {
-          "code": "SubscriptionIsOverQuotaForSku",
-          "message": "This region has quota of 1 instances for your subscription. Try selecting different region or SKU."
-        }
-      ]
-    }
-  ]
-}
-```
-
-Use the `azd down --purge` command to delete the resources, then deploy the template in a different region.

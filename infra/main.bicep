@@ -54,20 +54,6 @@ var appInsightsSettings = {
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
-var functionAppSettings = {
-  functionAppName: getResourceName('functionApp', environmentName, location, instanceId)
-  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'functionapp-${instanceId}')
-  netFrameworkVersion: 'v9.0'
-}
-
-var logicAppSettings = {
-  logicAppName: getResourceName('logicApp', environmentName, location, instanceId)
-  appServicePlanName: getResourceName('appServicePlan', environmentName, location, 'logicapp-${instanceId}')
-  netFrameworkVersion: 'v9.0'
-}
-
-var storageAccountName = getResourceName('storageAccount', environmentName, location, instanceId)
-
 var tags = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/protect-apim-with-oauth'
@@ -119,16 +105,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
-module storageAccount 'modules/services/storage-account.bicep' = {
-  name: 'storageAccount'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
-    storageAccountName: storageAccountName
-  }
-}
-
 module appInsights 'modules/services/app-insights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup
@@ -153,40 +129,6 @@ module apiManagement 'modules/services/api-management.bicep' = {
   ]
 }
 
-module functionApp 'modules/services/function-app.bicep' = {
-  name: 'functionApp'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
-    functionAppSettings: functionAppSettings
-    apiManagementSettings: apiManagementSettings
-    appInsightsName: appInsightsSettings.appInsightsName
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    appInsights
-    storageAccount
-  ]
-}
-
-module logicApp 'modules/services/logic-app.bicep' = {
-  name: 'logicApp'
-  scope: resourceGroup
-  params: {
-    location: location
-    tags: tags
-    logicAppSettings: logicAppSettings
-    apiManagementSettings: apiManagementSettings
-    appInsightsName: appInsightsSettings.appInsightsName
-    storageAccountName: storageAccountName
-  }
-  dependsOn: [
-    appInsights
-    storageAccount
-  ]
-}
-
 //=============================================================================
 // Application Resources
 //=============================================================================
@@ -198,18 +140,6 @@ module protectedApi 'modules/application/protected-api.bicep' = {
     apiManagementServiceName: apiManagementSettings.serviceName
     tenantId: subscription().tenantId
     oauthAudience: apimAppRegistration.outputs.appId
-  }
-  dependsOn: [
-    apiManagement
-  ]
-}
-
-module unprotectedApi 'modules/application/unprotected-api.bicep' = {
-  name: 'unprotectedApi'
-  scope: resourceGroup
-  params: {
-    apiManagementServiceName: apiManagementSettings.serviceName
-    oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
   }
   dependsOn: [
     apiManagement
@@ -229,8 +159,5 @@ output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
-output AZURE_FUNCTION_APP_NAME string = functionAppSettings.functionAppName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
-output AZURE_LOGIC_APP_NAME string = logicAppSettings.logicAppName
 output AZURE_RESOURCE_GROUP string = resourceGroupName
-output AZURE_STORAGE_ACCOUNT_NAME string = storageAccountName
