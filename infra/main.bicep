@@ -82,15 +82,26 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
-module entraId 'modules/entra-id.bicep' = {
-  name: 'entraId'
+module apiManagementApp 'modules/entra-id/api-management-app.bicep' = {
+  name: 'apiManagementApp'
   params: {
     tenantId: subscription().tenantId
     tags: tags
-    apimAppRegistrationName: apimAppRegistrationName
+    appRegistrationName: apimAppRegistrationName
     apiManagementServiceName: apiManagementSettings.serviceName
+  }
+}
+
+module clientApp 'modules/entra-id/client-app.bicep' = {
+  name: 'clientApp'
+  params: {
+    tags: tags
+    apimAppRegistrationName: apimAppRegistrationName
     clientName: clientName
   }
+  dependsOn: [
+    apiManagementApp
+  ]
 }
 
 module storageAccount 'modules/services/storage-account.bicep' = {
@@ -171,7 +182,7 @@ module protectedApi 'modules/application/protected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
     tenantId: subscription().tenantId
-    jwtAudience: entraId.outputs.apiManagementAppId
+    jwtAudience: apiManagementApp.outputs.appId
   }
   dependsOn: [
     apiManagement
