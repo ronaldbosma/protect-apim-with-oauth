@@ -53,3 +53,9 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
 }
+
+//=============================================================================
+// Resources
+//=============================================================================
+
+output appId string = clientAppRegistration.appId
