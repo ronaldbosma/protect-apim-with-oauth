@@ -2,7 +2,7 @@
 
 In this demo scenario, we will demonstrate how to protect an API in Azure API Management using OAuth.
 
-The template deploys a Protected API in Azure API Management, which is secured with OAuth. It also deploys an app registration in Entra ID that represents the API Management service, and two app registrations that represent the client applications. One that can access the API and one that does not have access to the API. See the following diagram for an overview:
+The template deploys a protected API in Azure API Management, which is secured with OAuth. It also deploys an app registration in Entra ID that represents the API Management service, and two app registrations that represent the client applications. One that can access the API and one that does not have access to the API. See the following diagram for an overview:
 
 ![Overview](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-overview.png)
 
@@ -21,9 +21,9 @@ The deployed resources follow the naming convention: `<resource-type>-<environme
 
 ## 2. What can I demo from this scenario after deployment
 
-### Test the Protected API
+### Test the protected API
 
-After the deployment is complete, you can test the Protected API using the steps in this section. 
+After the deployment is complete, you can test the protected API using the steps in this section. 
 The API is protected with OAuth, so you will need to obtain an access token from Entra ID using the client credentials flow. 
 The access token will be used to call the API. 
 See the following sequence diagram for an overview of the steps:
@@ -206,9 +206,9 @@ The app registrations and service principals that represent the client applicati
 Assignment of the roles to the valid client is done using [assign-app-roles.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/assign-app-roles.bicep).
 
 
-#### Review the Protected API
+#### Review the protected API
 
-The Protected API that is deployed in Azure API Management can be accessed via the Azure portal. 
+The protected API that is deployed in Azure API Management can be accessed via the Azure portal. 
 
 ![Protected API](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/protected-api.png)
 
