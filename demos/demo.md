@@ -1,38 +1,39 @@
 # Protect API Management with OAuth - Demo
 
-In this demo scenario, we will demonstrate how to protect an API in Azure API Management using OAuth.
+This demo shows how to protect an API in Azure API Management using OAuth.
 
-The template deploys a protected API in Azure API Management, which is secured with OAuth. It also deploys an app registration in Entra ID that represents the API Management service, and two app registrations that represent the client applications. One that can access the API and one that does not have access to the API. See the following diagram for an overview:
+The template deploys a protected API in Azure API Management secured with OAuth. It also deploys an app registration in Entra ID that represents the API Management service and two app registrations for client applications. One client can access the API and one cannot. See the following diagram for an overview:
 
 ![Overview](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-overview.png)
 
-## 1. What resources are getting deployed
+## 1. What resources get deployed
 
-The following resources will be deployed in a resource group in your Azure subscription:
+The following resources are deployed in a resource group in your Azure subscription:
 
 ![Deployed Resources](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/deployed-resources.png)
 
-The following app registrations will be created in your Entra ID tenant:
+The following app registrations are created in your Entra ID tenant:
 
 ![Deployed App Registrations](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/deployed-app-registrations.png)
 
 The deployed resources follow the naming convention: `<resource-type>-<environment-name>-<region>-<instance>`.
 
 
-## 2. What can I demo from this scenario after deployment
+## 2. What you can demo after deployment
 
 ### Test the protected API
 
-After the deployment is complete, you can test the protected API using the steps in this section. 
-The API is protected with OAuth, so you will need to obtain an access token from Entra ID using the client credentials flow. 
-The access token will be used to call the API. 
-See the following sequence diagram for an overview of the steps:
+After deployment completes, you can test the protected API using the steps in this section. 
+The API is protected with OAuth, so you'll need to obtain an access token from Entra ID using the client credentials flow. 
+You'll use the access token to call the API. 
+See the following sequence diagram for an overview:
 
 ![Sequence Diagram](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-sequence-diagram.png)
 
 #### Gather data and create client secrets
 
-We'll first need to gather some data and create client secrets for both clients:
+First, you'll need to gather some data and create client secrets for both clients. 
+Keep track of these values because you'll need them later.
 
 1. Navigate to your [app registrations](https://portal.azure.com/#view/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/~/RegisteredApps) in Entra ID.
 
@@ -52,7 +53,7 @@ We'll first need to gather some data and create client secrets for both clients:
 
 9. Add a description and set an expiration period for the secret.
 
-10. Click `Add` and make sure to copy the secret value. You will need it later.
+10. Click `Add` and copy the secret value (you won't be able to see it again).
 
 11. Repeat **steps 5-10** for the `invalidclient` app registration.
 
@@ -61,10 +62,10 @@ We'll first need to gather some data and create client secrets for both clients:
 
 #### Configure the REST Client extension in Visual Studio Code
 
-We'll use [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code to call the API. 
+You'll use the [REST Client](https://marketplace.visualstudio.com/items?itemName=humao.rest-client) extension in Visual Studio Code to call the API. 
 Follow these steps to configure an environment for the REST Client:
 
-1. Add an environment to your Visual Studio Code user settings with the OAuth settings ad API Management hostname. Use the following example and replace the values with your own:
+1. Add an environment to your Visual Studio Code user settings with the OAuth settings and API Management hostname. Use the following example and replace the values with your own:
     ```
     {
         ... MORE SETTINGS HERE ...
@@ -81,15 +82,15 @@ Follow these steps to configure an environment for the REST Client:
     }
     ```
 
-   1. Replace `<directory-tenant-id>` with the ``Directory (tenant) ID` you copied earlier.
-   1. Replace `<valid-application-client-id>` with `Application (client) ID` of the valid client app registration you copied earlier.
+   1. Replace `<directory-tenant-id>` with the `Directory (tenant) ID` you copied earlier.
+   1. Replace `<valid-application-client-id>` with the `Application (client) ID` of the valid client app registration you copied earlier.
    1. Replace `<valid-client-secret>` with the client secret you created for the `validclient` app registration.
-   1. Replace `<application-id-uri>` with the `Application ID URI` you copied earlier. Note that this value should end with `/.default`.
-   1. Replace `<your-api-management-name>` with the name of your API Management service
+   1. Replace `<application-id-uri>` with the `Application ID URI` you copied earlier. This value should end with `/.default`.
+   1. Replace `<your-api-management-name>` with the name of your API Management service.
 
-1. Also add an environment for the invalid client following the same steps as above, but use the values from the `invalidclient` app registration.
+1. Add a second environment for the invalid client following the same steps as above, but use the values from the `invalidclient` app registration.
 
-1. Your final user settings should look like this:
+1. Your final user settings should look similar to this:
 
     ```json
     {
@@ -117,21 +118,21 @@ Follow these steps to configure an environment for the REST Client:
 
 #### Call the API using the valid client
 
-Once we have the environments set up, we can start calling the API using the valid client by following these steps:
+Once you have the environments set up, you can start calling the API using the valid client:
 
 1. Open the [tests.http](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
 
 1. Review the first request `Get a token from Entra ID`. 
    This request uses the OAuth 2.0 client credentials flow to authenticate with Entra ID. The client ID and client secret are included in the request body for authentication. 
-   The scope parameter, which is constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
+   The scope parameter, constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
 
 1. Review the other three requests in the `tests.http` file. 
-   The retrieved access token is passed as a bearer token in the `Authorization` header of the requests.
+   The retrieved access token is passed as a bearer token in the `Authorization` header.
 
-1. At the right bottom, select the `validclient` environment.
+1. At the bottom right, select the `validclient` environment.
 
 1. Click on the `Send Request` button of the request `Get a token from Entra ID` to get an access token. 
-   A 200 Ok response is returned with the access token in the body.
+   A 200 OK response is returned with the access token in the body.
 
 1. Copy the access token and inspect it on https://jwt.ms/.  
 
@@ -163,16 +164,16 @@ Once we have the environments set up, we can start calling the API using the val
     }.[Signature]
     ```
 
-    Some important claims to note in the token:
+    Key claims to note in the token:
     1. The audience (`aud`) should match the `Application (client) ID` of the app registration that represents the API Management service.
     1. The issuer (`iss`) and tenant ID (`tid`) should match the `Directory (tenant) ID`.
-    1. The authorized party (`azp`) should match the `Application (client) ID` of the client app registration that you used to get the token.
-    1. The object ID (`oid`) and subject (`sub`) should match the object ID of service principal (enterprise application) of the client app registration.
+    1. The authorized party (`azp`) should match the `Application (client) ID` of the client app registration you used to get the token.
+    1. The object ID (`oid`) and subject (`sub`) should match the object ID of the service principal (enterprise application) of the client app registration.
     1. The `roles` should match the roles assigned to the client. For the valid client, this should be `Sample.Read` and `Sample.Write`.
 
 1. Click on the `Send Request` button of the other three requests.
-   1. The `GET` and `POST` request return a 200 OK response with the token details.
-   1. The `DELETE` request returns a 401 Unauthorized response, because the valid client does not have the `Sample.Delete` role assigned.
+   1. The `GET` and `POST` requests return a 200 OK response with the token details.
+   1. The `DELETE` request returns a 401 Unauthorized response because the valid client doesn't have the `Sample.Delete` role assigned.
 
 > Note that the requests return a lot of details for demo purposes that you normally would not want to expose in a production environment.
 
@@ -181,11 +182,11 @@ Once we have the environments set up, we can start calling the API using the val
 
 Follow these steps to call the API using the invalid client:
 
-1. At the right bottom, select the `invalidclient` environment.
+1. At the bottom right, select the `invalidclient` environment.
 
 1. Click on the `Send Request` button of the first request `Get a token from Entra ID` to get an access token. 
-   A 400 Bad Request response is returned with an error message that the client is not authorized to access the API Management service. 
-   This is because `appRoleAssignmentRequired` is set to `true` on the service principal of the app registration that represents the API Management service, which means that only clients that have a role assigned can retrieve an access token. See [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep).
+   A 400 Bad Request response is returned with an error message that the client isn't authorized to access the API Management service. 
+   This is because `appRoleAssignmentRequired` is set to `true` on the service principal of the app registration that represents the API Management service, which means only clients that have a role assigned can retrieve an access token. See [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep).
 
 
 ### Review the configuration files
@@ -197,9 +198,9 @@ The app registrations are deployed using the [Microsoft Graph Bicep Extension](h
 The app registration and service principal that represents the API Management service is deployed in [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep). 
 It specifies the following:
 - The `identifierUris` (`Application ID URI`) is set to `api://<apim-service-name>`. It's used as the scope when requesting an access token.
-- The `requestedAccessTokenVersion` property is set to `2`, which means that OAuth 2.0 tokens are issued.
+- The `requestedAccessTokenVersion` property is set to `2`, which means OAuth 2.0 tokens are issued.
 - The `appRoles` property specifies the available roles that can be assigned to clients.
-- The `appRoleAssignmentRequired` property on the service principal is set to `true`, which means that only clients that have a role assigned can retrieve an access token.
+- The `appRoleAssignmentRequired` property on the service principal is set to `true`, which means only clients that have a role assigned can retrieve an access token.
 
 The app registrations and service principals that represent the client applications are deployed with [client-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/client-app-registration.bicep).
 
@@ -208,7 +209,7 @@ Assignment of the roles to the valid client is done using [assign-app-roles.bice
 
 #### Review the protected API
 
-The protected API that is deployed in Azure API Management can be accessed via the Azure portal. 
+The protected API deployed in Azure API Management can be accessed via the Azure portal. 
 
 ![Protected API](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/protected-api.png)
 
@@ -218,14 +219,14 @@ The API has three operations:
 - The `DELETE` that requires the `Sample.Delete` role.
 
 A policy is deployed at the API scope using [protected-api.xml](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/application/protected-api.xml). The policy:
-- Checks with request was performed based on the HTTP method and determines which role is required.
+- Checks which request was performed based on the HTTP method and determines which role is required.
 - Validates the access token in the `Authorization` header using the [validate-azure-ad-token](https://learn.microsoft.com/en-us/azure/api-management/validate-azure-ad-token-policy) policy.
   - The `tenant-id` named value contains the `Directory (tenant) ID` of your Entra ID tenant.
   - The `oauth-audience` named value contains the `Application (client) ID` of the app registration that represents the API Management service.
 - Returns a 200 OK response with the token details if the access token is valid and the client has the required role.  
 - When an error occurs, it returns the details of the error in the response body.
 
-> Note that the API returns a lot of details for demo purposes that you normally would not want to expose in a production environment.
+> Note that the API returns a lot of details for demo purposes that you normally wouldn't want to expose in a production environment.
 
 ##### Alternative to validate-azure-ad-token policy
 
