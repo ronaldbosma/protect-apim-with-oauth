@@ -8,7 +8,7 @@ This template deploys the following resources:
 
 ![Overview](images/diagrams-overview.png)
 
-An API Management service is deployed with an API that is protected with OAuth. Using Bicep, the template also deploys app registrations in Entra ID that represent the API Management service and two client applications: one that can access the 'read' and 'write' operations of the API and one that does not have access to the API.
+An API Management service is deployed with an API that is protected with OAuth. Using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension), the template also deploys app registrations in Entra ID that represent the API Management service and two client applications: one that can access the 'read' and 'write' operations of the API and one that does not have access to the API.
 
 
 ## Getting Started
