@@ -122,8 +122,8 @@ Once we have the environments set up, we can start calling the API using the val
 1. Open the [tests.http](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
 
 1. Review the first request `Get a token from Entra ID`. 
-   The client credential flow is used and the id and secret of the client are passed in the body of the request.
-   The scope which is the `Application ID URI` of the app registration that represents the API Management service, followed by `/.default` is also included in the body so Entra ID knows for which resource (app registration) the token is requested.
+   This request uses the OAuth 2.0 client credentials flow to authenticate with Entra ID. The client ID and client secret are included in the request body for authentication. 
+   The scope parameter, which is constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
 
 1. Review the other three requests in the `tests.http` file. 
    The retrieved access token is passed as a bearer token in the `Authorization` header of the requests.
