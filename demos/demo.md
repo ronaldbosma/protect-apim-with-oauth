@@ -173,3 +173,25 @@ Follow these steps to configure an environment for the REST Client:
 1. Click on the `Send Request` button of the first request `Get a token from Entra ID` to get an access token. 
    A 400 Bad Request response is returned with an error message that the client is not authorized to access the API Management service. 
    This is because `appRoleAssignmentRequired` is set to `true` on the service principal of the app registration that represents the API Management service, which means that only clients that have a role assigned can retrieve an access token. See [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep).
+
+
+### Review the Protected API in Azure API Management
+
+The Protected API that is deployed in Azure API Management can be accessed via the Azure portal. 
+
+![Protected API](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/protected-api.png)
+
+The API has three operations:
+- The `GET` that requires the `Sample.Read` role.
+- The `POST` that requires the `Sample.Write` role.
+- The `DELETE` that requires the `Sample.Delete` role.
+
+A policy is deployed at the API scope using [protected-api.xml](infra/modules/application/protected-api.xml). The policy:
+- Checks with request was performed based on the HTTP method and determines which role is required.
+- Validates the access token in the `Authorization` header using the [/validate-jwt](https://learn.microsoft.com/en-us/azure/api-management/validate-jwt-policy) policy.
+  - The `tenant-id` named value contains the `Directory (tenant) ID` of your Entra ID tenant.
+  - The `oauth-audience` named value contains the `Application (client) ID` of the app registration that represents the API Management service.
+- Returns a 200 OK response with the token details if the access token is valid and the client has the required role.  
+- When an error occurs, it returns the details of the error in the response body.
+
+> Note that the API returns a lot of details for demo purposes that you normally would not want to expose in a production environment.
