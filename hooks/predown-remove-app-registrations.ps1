@@ -1,11 +1,32 @@
-# The Azure Developer CLI doesn't support deleting Entra ID resources yet, so we have to do it in a hook.
-# Related GitHub issue: https://github.com/Azure/azure-dev/issues/4724
-#
-# We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
+<#
+  This PowerShell script is executed before the resources are removed. 
+  It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
+  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
+  We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
+#>
+
+param(
+    [Parameter(Mandatory = $false)]
+    [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
+    
+    [Parameter(Mandatory = $false)]
+    [string]$ApimAppRegistrationName = $env:ENTRA_ID_APIM_APP_REGISTRATION_NAME,
+    
+    [Parameter(Mandatory = $false)]
+    [string]$ValidClientAppRegistrationName = $env:ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_NAME,
+    
+    [Parameter(Mandatory = $false)]
+    [string]$InvalidClientAppRegistrationName = $env:ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_NAME
+)
+
+# Validate required parameters
+if ([string]::IsNullOrEmpty($SubscriptionId)) {
+    throw "SubscriptionId parameter is required. Please provide it as a parameter or set the AZURE_SUBSCRIPTION_ID environment variable."
+}
 
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
-az account set --subscription $env:AZURE_SUBSCRIPTION_ID
+az account set --subscription $SubscriptionId
 if ($LASTEXITCODE -ne 0) {
     throw "Unable to set the Azure subscription. Please make sure that you're logged into the Azure CLI with the same credentials as the Azure Developer CLI."
 }
@@ -47,6 +68,6 @@ function Remove-ApplicationAndServicePrincipal($uniqueName){
 }
 
 
-Remove-ApplicationAndServicePrincipal $env:ENTRA_ID_APIM_APP_REGISTRATION_NAME
-Remove-ApplicationAndServicePrincipal $env:ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_NAME
-Remove-ApplicationAndServicePrincipal $env:ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_NAME
+Remove-ApplicationAndServicePrincipal $ApimAppRegistrationName
+Remove-ApplicationAndServicePrincipal $ValidClientAppRegistrationName
+Remove-ApplicationAndServicePrincipal $InvalidClientAppRegistrationName
