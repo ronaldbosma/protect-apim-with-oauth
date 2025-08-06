@@ -1,6 +1,7 @@
 # Protect API Management with OAuth
 
-An azd template using Bicep to demonstrate how to secure an API in Azure API Management with OAuth. It includes examples for deploying app registrations in Entra ID using Bicep.
+An `azd` template using Bicep to demonstrate how to secure an API in Azure API Management with OAuth. 
+It includes examples for deploying app registrations in Entra ID using Bicep.
 
 ## Overview
 
