@@ -110,6 +110,8 @@ Follow these steps to configure an environment for the REST Client:
 
 #### Call the API using the valid client
 
+Once we have the environments set up, we can start calling the API using the valid client by following these steps:
+
 1. Open the [tests.http](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
 
 1. Review the first request `Get a token from Entra ID`. 
@@ -170,6 +172,8 @@ Follow these steps to configure an environment for the REST Client:
 
 #### Call the API using the invalid client
 
+Follow these steps to call the API using the invalid client:
+
 1. At the right bottom, select the `invalidclient` environment.
 
 1. Click on the `Send Request` button of the first request `Get a token from Entra ID` to get an access token. 
@@ -183,14 +187,14 @@ Follow these steps to configure an environment for the REST Client:
 
 The app registrations are deployed using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension).
 
-The app registration and service principal that represents the API Management service is deployed using [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep). 
+The app registration and service principal that represents the API Management service is deployed in [apim-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/apim-app-registration.bicep). 
 It specifies the following:
 - The `identifierUris` (`Application ID URI`) is set to `api://<apim-service-name>`. It's used as the scope when requesting an access token.
-- The `requestedAccessTokenVersion` property is set to `2`, which means that OAuth 2.0 tokens are used.
+- The `requestedAccessTokenVersion` property is set to `2`, which means that OAuth 2.0 tokens are issued.
 - The `appRoles` property specifies the available roles that can be assigned to clients.
-- The `appRoleAssignmentRequired` property on the service principal is set to `true`, which means that only clients that have a role assigned can access the API Management service.
+- The `appRoleAssignmentRequired` property on the service principal is set to `true`, which means that only clients that have a role assigned can retrieve an access token.
 
-The app registrations and service principals that represent the client applications are deployed using [client-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/client-app-registration.bicep).
+The app registrations and service principals that represent the client applications are deployed with [client-app-registration.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/client-app-registration.bicep).
 
 Assignment of the roles to the valid client is done using [assign-app-roles.bicep](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/entra-id/assign-app-roles.bicep).
 
