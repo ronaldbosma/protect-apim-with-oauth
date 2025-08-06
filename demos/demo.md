@@ -165,16 +165,16 @@ Once we have the environments set up, we can start calling the API using the val
 
     Some important claims to note in the token:
     1. The audience (`aud`) should match the `Application (client) ID` of the app registration that represents the API Management service.
-    1. The issuer (`iss`) and tenant ID (`tid`) should match the `Directory (tenant) ID`
+    1. The issuer (`iss`) and tenant ID (`tid`) should match the `Directory (tenant) ID`.
     1. The authorized party (`azp`) should match the `Application (client) ID` of the client app registration that you used to get the token.
     1. The object ID (`oid`) and subject (`sub`) should match the object ID of service principal (enterprise application) of the client app registration.
-    1. The roles (`roles`) should match the roles assigned to the client. For the valid client, this should be `Sample.Read` and `Sample.Write`.
+    1. The `roles` should match the roles assigned to the client. For the valid client, this should be `Sample.Read` and `Sample.Write`.
 
 1. Click on the `Send Request` button of the other three requests.
    1. The `GET` and `POST` request return a 200 OK response with the token details.
    1. The `DELETE` request returns a 401 Unauthorized response, because the valid client does not have the `Sample.Delete` role assigned.
 
-   > Note that the requests return a lot of details for demo purposes that you normally would not want to expose in a production environment.
+> Note that the requests return a lot of details for demo purposes that you normally would not want to expose in a production environment.
 
 
 #### Call the API using the invalid client
