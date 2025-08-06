@@ -1,6 +1,8 @@
 # Protect API Management with OAuth - Demo
 
-In this demo scenario, we will demonstrate how to protect an API in Azure API Management using OAuth. The template includes the necessary resources and configurations to deploy app registrations in Entra ID using Bicep.
+In this demo scenario, we will demonstrate how to protect an API in Azure API Management using OAuth.
+
+The template deploys a Protected API in Azure API Management, which is secured with OAuth. It also deploys an app registration in Entra ID that represents the API Management service, and two app registrations that represent the client applications. One that can access the API and one that does not have access to the API. See the following diagram for an overview:
 
 ![Overview](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-overview.png)
 
