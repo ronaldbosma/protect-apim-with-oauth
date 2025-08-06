@@ -110,9 +110,16 @@ Follow these steps to configure an environment for the REST Client:
 
 1. Open the [tests.http](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
 
+1. Review the first request `Get a token from Entra ID`. 
+   The client credential flow is used and the id and secret of the client are passed in the body of the request.
+   The scope which is the `Application ID URI` of the app registration that represents the API Management service, followed by `/.default` is also included in the body so Entra ID knows for which resource (app registration) the token is requested.
+
+1. Review the other three requests in the `tests.http` file. 
+   The retrieved access token is passed as a bearer token in the `Authorization` header of the requests.
+
 1. At the right bottom, select the `validclient` environment.
 
-1. Click on the `Send Request` button of the first request `Get a token from Entra ID` to get an access token. 
+1. Click on the `Send Request` button of the request `Get a token from Entra ID` to get an access token. 
    A 200 Ok response is returned with the access token in the body.
 
 1. Copy the access token and inspect it on https://jwt.ms/.  
@@ -152,9 +159,9 @@ Follow these steps to configure an environment for the REST Client:
     1. The object ID (`oid`) and subject (`sub`) should match the object ID of service principal (enterprise application) of the client app registration.
     1. The roles (`roles`) should match the roles assigned to the client. For the valid client, this should be `Sample.Read` and `Sample.Write`.
 
-1. Click on the `Send Request` button of the other three requests. 
-   The `GET` and `POST` request return a 200 OK response with the token details. 
-   The `DELETE` request returns a 401 Unauthorized response, because the valid client does not have the `Sample.Delete` role assigned.  
+1. Click on the `Send Request` button of the other three requests.
+   1. The `GET` and `POST` request return a 200 OK response with the token details.
+   1. The `DELETE` request returns a 401 Unauthorized response, because the valid client does not have the `Sample.Delete` role assigned.
 
    > Note that the requests return a lot of details for demo purposes that you normally would not want to expose in a production environment.
 
