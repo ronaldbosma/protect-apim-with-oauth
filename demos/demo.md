@@ -23,6 +23,13 @@ The deployed resources follow the naming convention: `<resource-type>-<environme
 
 ### Test the Protected API
 
+After the deployment is complete, you can test the Protected API using the steps in this section. 
+The API is protected with OAuth, so you will need to obtain an access token from Entra ID using the client credentials flow. 
+The access token will be used to call the API. 
+See the following sequence diagram for an overview of the steps:
+
+![Sequence Diagram](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-sequence-diagram.png)
+
 #### Gather data and create client secrets
 
 We'll first need to gather some data and create client secrets for both clients:
