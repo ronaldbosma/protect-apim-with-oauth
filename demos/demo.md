@@ -217,9 +217,9 @@ The API has three operations:
 - The `POST` that requires the `Sample.Write` role.
 - The `DELETE` that requires the `Sample.Delete` role.
 
-A policy is deployed at the API scope using [protected-api.xml](infra/modules/application/protected-api.xml). The policy:
+A policy is deployed at the API scope using [protected-api.xml](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/application/protected-api.xml). The policy:
 - Checks with request was performed based on the HTTP method and determines which role is required.
-- Validates the access token in the `Authorization` header using the [/validate-jwt](https://learn.microsoft.com/en-us/azure/api-management/validate-jwt-policy) policy.
+- Validates the access token in the `Authorization` header using the [validate-jwt](https://learn.microsoft.com/en-us/azure/api-management/validate-jwt-policy) policy.
   - The `tenant-id` named value contains the `Directory (tenant) ID` of your Entra ID tenant.
   - The `oauth-audience` named value contains the `Application (client) ID` of the app registration that represents the API Management service.
 - Returns a 200 OK response with the token details if the access token is valid and the client has the required role.  
