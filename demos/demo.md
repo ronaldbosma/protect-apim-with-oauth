@@ -219,10 +219,29 @@ The API has three operations:
 
 A policy is deployed at the API scope using [protected-api.xml](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/infra/modules/application/protected-api.xml). The policy:
 - Checks with request was performed based on the HTTP method and determines which role is required.
-- Validates the access token in the `Authorization` header using the [validate-jwt](https://learn.microsoft.com/en-us/azure/api-management/validate-jwt-policy) policy.
+- Validates the access token in the `Authorization` header using the [validate-azure-ad-token](https://learn.microsoft.com/en-us/azure/api-management/validate-azure-ad-token-policy) policy.
   - The `tenant-id` named value contains the `Directory (tenant) ID` of your Entra ID tenant.
   - The `oauth-audience` named value contains the `Application (client) ID` of the app registration that represents the API Management service.
 - Returns a 200 OK response with the token details if the access token is valid and the client has the required role.  
 - When an error occurs, it returns the details of the error in the response body.
 
 > Note that the API returns a lot of details for demo purposes that you normally would not want to expose in a production environment.
+
+##### Alternative to validate-azure-ad-token policy
+
+As an alternative to the `validate-azure-ad-token` policy, you can use the [validate-jwt](https://learn.microsoft.com/en-us/azure/api-management/validate-jwt-policy) policy to validate the access token. 
+Here's an example of how to configure the `validate-jwt` policy using Entra ID, but it also works with different Identity Providers that support OpenID Connect:
+
+```
+<validate-jwt header-name="Authorization">
+    <openid-config url="https://login.microsoftonline.com/{{tenant-id}}/v2.0/.well-known/openid-configuration" />
+    <audiences>
+        <audience>{{oauth-audience}}</audience>
+    </audiences>
+    <required-claims>
+        <claim name="roles" match="any">
+            <value>@((string)context.Variables["role"])</value>
+        </claim>
+    </required-claims>
+</validate-jwt>
+```
