@@ -79,7 +79,7 @@ The repository consists of the following files and directories:
 ├── infra                      [ Infrastructure As Code files ]
 │   |── functions              [ Bicep user-defined functions ]
 │   ├── modules                
-│   │   ├── application        [ Modules for application infrastructure resources ]
+│   │   ├── application        [ The protected API ]
 │   │   ├── entra-id           [ Modules for all Entra ID resources ]
 │   │   └── services           [ Modules for all Azure services ]
 │   ├── types                  [ Bicep user-defined types ]
