@@ -1,6 +1,6 @@
 # Protect API Management with OAuth
 
-An `azd` template using Bicep to demonstrate how to secure an API in Azure API Management with OAuth. 
+An Azure Developer CLI (`azd`) template using Bicep to demonstrate how to secure an API in Azure API Management with OAuth. 
 It includes examples for deploying app registrations in Entra ID using Bicep.
 
 ## Overview
@@ -9,21 +9,24 @@ This template deploys the following resources:
 
 ![Overview](images/diagrams-overview.png)
 
-An API Management service is deployed with an API that is protected with OAuth. Using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension), the template also deploys app registrations in Entra ID that represent the API Management service and two client applications: one that can access the 'read' and 'write' operations of the API and one that does not have access to the API.
+The template creates an API Management service with an OAuth-protected API. It also deploys two Entra ID app registrations using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension): one client with 'read' and 'write' permissions ahd one client with no API access (for testing authorization failures)
 
 
 ## Getting Started
 
 ### Prerequisites  
 
-Before you can deploy this template, make sure you have the following tools installed and the necessary permissions:  
+Before you can deploy this template, make sure you have the following tools installed and the necessary permissions.
 
+**Required Tools:**
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
-  - Installing `azd` also installs the following tools:  
-    - [GitHub CLI](https://cli.github.com)  
-    - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
+  Installing `azd` also installs the following tools:  
+  - [GitHub CLI](https://cli.github.com)  
+  - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
   _(This template has several hooks. See [this section](#hooks) for more information.)_
+
+**Required Permissions:**
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
@@ -46,7 +49,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
     azd auth login
     ```
 
-1. Run the `azd up` command to provision the resources in your Azure subscription and Entra ID tenant. This deployment will typically take around 4 minutes to complete.
+1. Run the `azd up` command to provision the resources in your Azure subscription and Entra ID tenant. This deployment typically takes around 4 minutes to complete.
 
     ```cmd
     azd up
@@ -58,7 +61,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
 ### Demo
 
-See the [Demo Guide](demos/demo.md) for a step-by-step walkthrough on how to test and demonstrate the deployed resources.
+The [Demo Guide](demos/demo.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources.
 
 ### Clean up
 
