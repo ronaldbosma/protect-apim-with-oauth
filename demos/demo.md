@@ -122,14 +122,17 @@ Once you have the environments set up, you can start calling the API using the v
 
 1. Open the [tests.http](https://github.com/ronaldbosma/protect-apim-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
 
+1. To select the `validclient` Rest Client environment, use either of the following options:
+    - Option 1: Click on `No Environment` in the bottom right corner of the status bar.
+    - Option 2: Press `Ctrl` + `Alt` + `E`.
+    - Option 3: Press `F1`, type **Rest Client: Switch Environment**
+
 1. Review the first request `Get a token from Entra ID`. 
    This request uses the OAuth 2.0 client credentials flow to authenticate with Entra ID. The client ID and client secret are included in the request body for authentication. 
    The scope parameter, constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
 
 1. Review the other three requests in the `tests.http` file. 
    The retrieved access token is passed as a bearer token in the `Authorization` header.
-
-1. At the bottom right, select the `validclient` environment.
 
 1. Click on the `Send Request` button of the request `Get a token from Entra ID` to get an access token. 
    A 200 OK response is returned with the access token in the body.
