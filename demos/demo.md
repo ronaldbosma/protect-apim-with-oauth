@@ -132,7 +132,7 @@ Once you have the environments set up, you can start calling the API using the v
    The scope parameter, constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
 
    See the following diagram for a mapping between the HTTP request and the properties of the app registrations:  
-   
+
    ![HTTP Request Mapping](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-http-request-mapping.png)
 
 1. Review the other three requests in the `tests.http` file. 
@@ -141,7 +141,8 @@ Once you have the environments set up, you can start calling the API using the v
 1. Click on the `Send Request` button of the request `Get a token from Entra ID` to get an access token. 
    A 200 OK response is returned with the access token in the body.
 
-1. Copy the access token and inspect it on https://jwt.ms/.  
+1. Copy the access token and inspect it on https://jwt.ms/. 
+   It should look similar to the following (the signature part is omitted for brevity):  
 
     ```json
     {
