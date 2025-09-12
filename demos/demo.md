@@ -131,6 +131,8 @@ Once you have the environments set up, you can start calling the API using the v
    This request uses the OAuth 2.0 client credentials flow to authenticate with Entra ID. The client ID and client secret are included in the request body for authentication. 
    The scope parameter, constructed from the `Application ID URI` of the API Management app registration (ending with `/.default`), specifies to Entra ID which resource the token should be retrieved for.
 
+   ![HTTP Request Mapping](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-http-request-mapping.png)
+
 1. Review the other three requests in the `tests.http` file. 
    The retrieved access token is passed as a bearer token in the `Authorization` header.
 
@@ -173,6 +175,8 @@ Once you have the environments set up, you can start calling the API using the v
     1. The authorized party (`azp`) should match the `Application (client) ID` of the client app registration you used to get the token.
     1. The object ID (`oid`) and subject (`sub`) should match the object ID of the service principal (enterprise application) of the client app registration.
     1. The `roles` should match the roles assigned to the client. For the valid client, this should be `Sample.Read` and `Sample.Write`.
+
+   ![JWT Token Mapping](https://raw.githubusercontent.com/ronaldbosma/protect-apim-with-oauth/refs/heads/main/images/diagrams-jwt-token-mapping.png)
 
 1. Click on the `Send Request` button of the other three requests.
    1. The `GET` and `POST` requests return a 200 OK response with the token details.
