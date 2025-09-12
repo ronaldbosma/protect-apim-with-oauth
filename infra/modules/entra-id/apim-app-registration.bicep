@@ -69,7 +69,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   }
 
   appRoles: [for role in appRoles: {
-    id: guid(tenantId, role.name)
+    id: guid(tenantId, name, role.name)
     description: role.description
     displayName: role.name
     value: role.name
