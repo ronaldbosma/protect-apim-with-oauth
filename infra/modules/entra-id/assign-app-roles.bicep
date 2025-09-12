@@ -48,17 +48,20 @@ func getAppRoleIdByValue(appRoles array, value string) string =>
   first(filter(appRoles, (role) => role.value == value)).id
 
 //=============================================================================
+// Variables
+//=============================================================================
+
+var rolesToAssign = [
+  'Sample.Read'
+  'Sample.Write'
+]
+
+//=============================================================================
 // Resources
 //=============================================================================
 
-resource assignSampleRead 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
+resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [for role in rolesToAssign: {
   resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Read')
+  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, role)
   principalId: clientServicePrincipal.id
-}
-
-resource assignSampleWrite 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Write')
-  principalId: clientServicePrincipal.id
-}
+}]
