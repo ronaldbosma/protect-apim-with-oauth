@@ -31,7 +31,8 @@ param name string
 //=============================================================================
 
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  tags: helpers.flattenTags(tags)
+  // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
+  tags: concat(helpers.flattenTags(tags), ['HideApp'])
   
   uniqueName: name
   displayName: name
