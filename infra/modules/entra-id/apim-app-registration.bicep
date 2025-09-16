@@ -76,12 +76,6 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
     allowedMemberTypes: [ 'Application' ]
     isEnabled: true
   }]
-
-  owners: {
-    relationships: [
-      deployer().objectId
-    ]
-  }
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {

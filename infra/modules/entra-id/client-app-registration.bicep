@@ -35,12 +35,6 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   
   uniqueName: name
   displayName: name
-
-  owners: {
-    relationships: [
-      deployer().objectId
-    ]
-  }
 }
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
