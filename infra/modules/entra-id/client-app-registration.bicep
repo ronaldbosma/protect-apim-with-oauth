@@ -31,16 +31,16 @@ param name string
 //=============================================================================
 
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
-  // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
-  tags: concat(helpers.flattenTags(tags), ['HideApp'])
-  
   uniqueName: name
   displayName: name
+
+  // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
+  tags: concat(helpers.flattenTags(tags), ['HideApp'])
 }
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
-  
+
   // Enforces that users/clients must be assigned an app role to access the application.
   // This is not strictly required for this scenario, but it adds an extra layer of security.
   appRoleAssignmentRequired: true
