@@ -40,6 +40,10 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
+  
+  // Enforces that users/clients must be assigned an app role to access the application.
+  // This is not strictly required for this scenario, but it adds an extra layer of security.
+  appRoleAssignmentRequired: true
 }
 
 //=============================================================================
