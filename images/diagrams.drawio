@@ -1,4 +1,4 @@
-<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="4">
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/28.1.2 Chrome/138.0.7204.243 Electron/37.4.0 Safari/537.36" version="28.1.2" pages="5">
   <diagram name="overview" id="v-fH6MzNMlpos3FZSHfg">
     <mxGraphModel dx="1426" dy="841" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -73,6 +73,51 @@
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="overview-simplified" id="vMMWGtBIoiW8GGokG-ND">
+    <mxGraphModel dx="1188" dy="701" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-0" />
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-1" parent="h9MAxBAYmQJFWmRXVx8e-0" />
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-2" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="110" y="410" width="430" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-3" value="" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="330" y="200" width="210" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-4" value="API Management" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/app_services/API_Management_Services.svg;imageBackground=default;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="402.5" y="170" width="65" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-5" value="API" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+JiN4YTsgICAgPHBhdGggZmlsbD0iIzU3YTMwMCIgZD0iTTAgMjAuODRoMTkuNTV2OC4zMkgweiIvPiYjeGE7ICAgIDxwYXRoIGZpbGw9IiM1OWI0ZDkiIGQ9Ik00MS42OCAyMC44NGgxMC4yNnY4LjMySDQxLjY4eiIvPiYjeGE7ICAgIDxjaXJjbGUgZmlsbD0iIzU3YTMwMCIgcj0iOS40NiIgY3k9IjI1IiBjeD0iMjAuMTIiLz4mI3hhOyAgICA8cGF0aCBmaWxsPSIjNTliNGQ5IiBkPSJNMjAuMTIuNDh2MTAuOTZhMSAxIDAgMCAxIDAgMjcuMTR2MTAuOTZhMSAxIDAgMCAwIDAtNDkuMDVaIi8+JiN4YTs8L3N2Zz4=;imageBackground=none;fontStyle=1" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="410" y="260" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-6" value="Microsoft Entra ID" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Entra_Identity.svg;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="291" y="390" width="68" height="60.440000000000005" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-7" value="1b. retrieves&amp;nbsp;&lt;div&gt;token for&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.373;entryY=-0.037;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="h9MAxBAYmQJFWmRXVx8e-1" source="h9MAxBAYmQJFWmRXVx8e-10" target="h9MAxBAYmQJFWmRXVx8e-12">
+          <mxGeometry x="-0.1444" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-8" value="1a. retrieves token&lt;div&gt;using client&amp;nbsp;&lt;/div&gt;&lt;div&gt;credentials from&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="h9MAxBAYmQJFWmRXVx8e-1" source="h9MAxBAYmQJFWmRXVx8e-10" target="h9MAxBAYmQJFWmRXVx8e-14">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-9" value="2. calls API&lt;div&gt;with Bearer token&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="h9MAxBAYmQJFWmRXVx8e-1" source="h9MAxBAYmQJFWmRXVx8e-10" target="h9MAxBAYmQJFWmRXVx8e-5">
+          <mxGeometry x="-0.3454" y="25" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-10" value="Client" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;fontStyle=0;labelBackgroundColor=default;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="170" y="260" width="47.5" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-12" value="API Management" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="410" y="430" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="h9MAxBAYmQJFWmRXVx8e-14" value="Client" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" vertex="1" parent="h9MAxBAYmQJFWmRXVx8e-1">
+          <mxGeometry x="189.25" y="430" width="50" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
