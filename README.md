@@ -18,7 +18,7 @@ Want to learn more about how this template works? Check out the accompanying blo
 
 If you want to learn more about calling OAuth-Protected APIs from Azure API Management, check out the following resources:
 - [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity)
-- [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-with-managed-identity)
+- [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth)
 
 > [!IMPORTANT]  
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
