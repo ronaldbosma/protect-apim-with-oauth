@@ -16,7 +16,7 @@ Additionally, Application Insights and Log Analytics Workspace are deployed for 
 
 Want to learn more about how this template works? Check out the accompanying blog post [Protect APIs in Azure API Management with OAuth](https://ronaldbosma.github.io/blog/2025/09/16/protect-apis-in-azure-api-management-with-oauth/).
 
-If you want to learn more about calling OAuth-Protected APIs from Azure API Management, check out the following resources:
+If you want to learn more about calling OAuth-Protected APIs from or on Azure API Management, check out the following resources:
 - [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity)
 - [Call API Management backend with OAuth](https://github.com/ronaldbosma/call-apim-backend-with-oauth)
 
