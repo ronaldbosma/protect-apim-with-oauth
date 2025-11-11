@@ -11,8 +11,8 @@ This template deploys the following resources:
 
 The template creates an API Management service with an OAuth-protected API. 
 It also deploys three Entra ID app registrations using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension): 
-one app registration that represents the APIs in API Management, one client with 'read' and 'write' permissions and one client with no API access (for testing authorization failures).
-Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
+Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes. 
+A Key Vault is also included to securely store client secrets for integration tests.
 
 Want to learn more about how this template works? Check out the accompanying blog post [Protect APIs in Azure API Management with OAuth](https://ronaldbosma.github.io/blog/2025/09/16/protect-apis-in-azure-api-management-with-oauth/).
 
@@ -103,7 +103,8 @@ The repository consists of the following files and directories:
 │   ├── modules                
 │   │   ├── application        [ The protected API ]
 │   │   ├── entra-id           [ Modules for all Entra ID resources ]
-│   │   └── services           [ Modules for all Azure services ]
+│   │   ├── services           [ Modules for all Azure services ]
+│   │   └── shared             [ Shared Bicep modules ]
 │   ├── types                  [ Bicep user-defined types ]
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
