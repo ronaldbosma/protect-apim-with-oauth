@@ -3,6 +3,8 @@
   Currently, we can't create secrets for an app registration with Bicep.
   This script creates a client secret for each client app registration in Entra ID and stores it securely in Azure Key Vault. 
   If the client secret already exists in Key Vault, it won't create a new one.
+
+  NOTE: secrets are stored as base64 encoded strings to avoid issues with special characters.
 #>
 
 param(
@@ -87,12 +89,18 @@ function Add-ClientSecretToKeyVault {
 
     Write-Host "Client secret created successfully for app registration '$AppId'"
 
+    # Encode the client secret as base64 to ensure safe storage in Key Vault
+    # This prevents issues with special characters (e.g., secrets starting with '-') that could cause errors when storing the secret
+    $secretBytes = [System.Text.Encoding]::UTF8.GetBytes($secretResult)
+    $base64Secret = [System.Convert]::ToBase64String($secretBytes)
+
     # Store the client secret in Key Vault
     Write-Host "Storing client secret '$SecretName' in Key Vault '$KeyVaultName'"
     az keyvault secret set `
         --vault-name $KeyVaultName `
         --name $SecretName `
-        --value $secretResult `
+        --value $base64Secret `
+        --tags encoding=base64 `
         --output none
 
     if ($LASTEXITCODE -ne 0) {
