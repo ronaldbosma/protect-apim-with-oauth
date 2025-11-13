@@ -37,15 +37,15 @@ public sealed class ClientTests
         var apimClient = new IntegrationTestHttpClient(config.AzureApiManagementGatewayUrl);
         apimClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", result.AccessToken);
 
-        // Call GET on Protected API with token and verify that a 200 OK is returned
+        // Call GET on Protected API with token and assert that a 200 OK is returned
         var getResponse = await apimClient.GetAsync("protected");
         Assert.AreEqual(HttpStatusCode.OK, getResponse.StatusCode, "Unexpected status code returned");
 
-        // Call POST on Protected API with token and verify that a 200 OK is returned
+        // Call POST on Protected API with token and assert that a 200 OK is returned
         var postResponse = await apimClient.PostAsync("protected", null);
         Assert.AreEqual(HttpStatusCode.OK, postResponse.StatusCode, "Unexpected status code returned");
 
-        // Call DELETE on Protected API with token and verify that a 401 Unauthorized is returned
+        // Call DELETE on Protected API with token and assert that a 401 Unauthorized is returned
         var deleteResponse = await apimClient.DeleteAsync("protected");
         Assert.AreEqual(HttpStatusCode.Unauthorized, deleteResponse.StatusCode, "Unexpected status code returned");
     }
@@ -69,8 +69,13 @@ public sealed class ClientTests
             .WithAuthority(new Uri($"https://login.microsoftonline.com/{config.AzureTenantId}"))
             .Build();
 
-        // Get access token using MSAL and verify that it failed
+        // Get access token using MSAL
         var act = async () => await app.AcquireTokenForClient([$"{config.OAuthTargetResource}/.default"]).ExecuteAsync();
-        await Assert.ThrowsExactlyAsync<MsalUiRequiredException>(act);
+
+        // Assert that the correct exception is returned indicating that the client does n
+        var exception = await Assert.ThrowsExactlyAsync<MsalUiRequiredException>(act);
+        Assert.AreEqual("invalid_grant", exception.ErrorCode, "Unexpected error code");
+        Assert.AreEqual(400, exception.StatusCode, "Unexpected status code");
+        StringAssert.Contains(exception.Message, "is not assigned to a role for the application", "Unexpected exception message");
     }
 }
