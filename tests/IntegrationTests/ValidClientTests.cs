@@ -13,7 +13,7 @@ public sealed class ValidClientTests
     [TestMethod]
     public async Task TestMethod()
     {
-        // Act
+        // Arrange
         var config = TestConfiguration.Load();
 
         var keyVaultClient = new KeyVaultClient(config.AzureKeyVaultUri);
@@ -21,8 +21,10 @@ public sealed class ValidClientTests
 
         var apimClient = new IntegrationTestHttpClient(config.AzureApiManagementGatewayUrl);
 
+        // Act
 
-        // Arrange
+
+        // Assert
 
     }
 }
