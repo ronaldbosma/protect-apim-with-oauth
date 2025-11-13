@@ -183,6 +183,9 @@ module protectedApi 'modules/application/protected-api.bicep' = {
 // Outputs
 //=============================================================================
 
+// Return the Azure tenant id so it is available in the .env file and can be used in e.g. the integration tests
+output AZURE_TENANT_ID string = subscription().tenantId
+
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
