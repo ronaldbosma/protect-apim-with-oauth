@@ -91,6 +91,7 @@ function Add-ClientSecretToKeyVault {
 
     # Encode the client secret as base64 to ensure safe storage in Key Vault
     # This prevents issues with special characters (e.g., secrets starting with '-') that could cause errors when storing the secret
+    # See also https://github.com/Azure/azure-cli/issues/23016
     $secretBytes = [System.Text.Encoding]::UTF8.GetBytes($secretResult)
     $base64Secret = [System.Convert]::ToBase64String($secretBytes)
 
