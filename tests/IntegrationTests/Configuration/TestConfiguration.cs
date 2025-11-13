@@ -7,8 +7,14 @@ namespace IntegrationTests.Configuration;
 /// </summary>
 internal class TestConfiguration
 {
+    public required string AzureTenantId { get; init; }
+
     public required Uri AzureApiManagementGatewayUrl { get; init; }
     public required Uri AzureKeyVaultUri { get; init; }
+
+    public required string ValidClientId { get; set; }
+    public required string InvalidClientId { get; set; }
+    public required string OAuthTargetResource { get; init; }
 
     public static TestConfiguration Load()
     {
@@ -20,8 +26,12 @@ internal class TestConfiguration
 
         return new TestConfiguration
         {
+            AzureTenantId = configuration.GetRequiredString("AZURE_TENANT_ID"),
             AzureApiManagementGatewayUrl = configuration.GetRequiredUri("AZURE_API_MANAGEMENT_GATEWAY_URL"),
-            AzureKeyVaultUri = configuration.GetRequiredUri("AZURE_KEY_VAULT_URI")
+            AzureKeyVaultUri = configuration.GetRequiredUri("AZURE_KEY_VAULT_URI"),
+            ValidClientId = configuration.GetRequiredString("ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID"),
+            InvalidClientId = configuration.GetRequiredString("ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID"),
+            OAuthTargetResource = configuration.GetRequiredString("ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI")
         };
     }
 }
