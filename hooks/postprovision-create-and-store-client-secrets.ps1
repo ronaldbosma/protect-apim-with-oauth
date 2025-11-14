@@ -76,32 +76,33 @@ function Add-ClientSecretToKeyVault {
     }
 
     # Create client secret for the app registration
+    # Retry if the secret starts with '-' as this can cause issues with Key Vault storage
+    # See also https://github.com/Azure/azure-cli/issues/23016
     Write-Host "Creating client secret for app registration '$AppId'"
-    $secretResult = az ad app credential reset `
-        --id $AppId `
-        --display-name $SecretDisplayName `
-        --query "password" `
-        --output tsv
+    do {
+        $secretResult = az ad app credential reset `
+            --id $AppId `
+            --display-name $SecretDisplayName `
+            --query "password" `
+            --output tsv
 
-    if ($LASTEXITCODE -ne 0) {
-        throw "Failed to create client secret for app registration: $AppId"
-    }
+        if ($LASTEXITCODE -ne 0) {
+            throw "Failed to create client secret for app registration: $AppId"
+        }
+
+        if ($secretResult.StartsWith('-')) {
+            Write-Host "Generated secret starts with '-', regenerating..."
+        }
+    } while ($secretResult.StartsWith('-'))
 
     Write-Host "Client secret created successfully for app registration '$AppId'"
-
-    # Encode the client secret as base64 to ensure safe storage in Key Vault
-    # This prevents issues with special characters (e.g., secrets starting with '-') that could cause errors when storing the secret
-    # See also https://github.com/Azure/azure-cli/issues/23016
-    $secretBytes = [System.Text.Encoding]::UTF8.GetBytes($secretResult)
-    $base64Secret = [System.Convert]::ToBase64String($secretBytes)
 
     # Store the client secret in Key Vault
     Write-Host "Storing client secret '$SecretName' in Key Vault '$KeyVaultName'"
     az keyvault secret set `
         --vault-name $KeyVaultName `
         --name $SecretName `
-        --value $base64Secret `
-        --tags encoding=base64 `
+        --value $secretResult `
         --output none
 
     if ($LASTEXITCODE -ne 0) {
