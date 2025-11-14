@@ -10,7 +10,7 @@ This template deploys the following resources:
 ![Overview](images/diagrams-overview.png)
 
 The template creates an API Management service with an OAuth-protected API. 
-It also deploys three Entra ID app registrations using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension): 
+It also deploys three Entra ID app registrations using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension): one app registration that represents the APIs in API Management, one client with 'read' and 'write' permissions and one client with no API access (for testing authorization failures).
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes. 
 A Key Vault is also included to securely store client secrets for integration tests.
 
@@ -42,6 +42,11 @@ Before you can deploy this template, make sure you have the following tools inst
 - You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
+
+**Optional Prerequisites:**
+
+To build and run the [integration tests](#integration-tests) locally, you need the following additional tools:
+- [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
 
 ### Deployment
 
@@ -95,6 +100,8 @@ azd down --purge
 The repository consists of the following files and directories:
 
 ```
+├── .github                    
+│   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README and demo guide ]
@@ -109,6 +116,7 @@ The repository consists of the following files and directories:
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
 ├── tests                      
+│   ├── IntegrationTests       [ Integration tests for automatically verifying different scenarios ]
 │   └── tests.http             [ HTTP requests to test the deployed resources ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
@@ -140,6 +148,55 @@ These PowerShell scripts are executed before the resources are removed.
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
   Permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
+
+
+## Pipeline
+
+This template includes a GitHub Actions workflow that automates the build, deployment and cleanup process. The workflow is defined in [azure-dev.yml](.github/workflows/azure-dev.yml) and provides a complete CI/CD pipeline for this template using the Azure Developer CLI.
+
+![GitHub Actions Workflow Summary](images/github-actions-workflow-summary.png)
+
+The pipeline consists of the following jobs:
+
+- **Build, Verify and Package**: This job sets up the build environment, validates the Bicep template and packages the integration tests.
+- **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
+- **Execute Integration Tests**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality.
+- **Clean Up Resources**: This job removes all deployed Azure resources.  
+
+  By default, cleanup runs automatically after the deployment. This can be disabled via an input parameter when the workflow is triggered manually.
+
+  ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
+
+### Setting Up the Pipeline
+
+To set up the pipeline in your own repository, run the following command (add ` --provider azdo` if you want to create an Azure DevOps pipeline):
+
+```cmd
+azd pipeline config
+```
+
+Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline, and only a **service principal** can be granted the necessary permissions in Entra ID.
+
+After the service principal has been created:
+- Add the Microsoft Graph permissions **Application.ReadWrite.All** and **AppRoleAssignment.ReadWrite.All*** to the app registration of the service principal, and grant admin consent for these permissions. Use the **application permissions** type, not delegated permissions type. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
+- Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role if it's not already assigned. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
+
+For detailed guidance, refer to:
+- [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
+- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)  
+
+> [!TIP]
+> By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables in GitHub when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
+
+> [!NOTE]
+> In the GitHub Actions workflow, the environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
+
+
+## Integration Tests
+
+The project includes integration tests built with **.NET 9** that validate various scenarios through the deployed Azure services. 
+The tests implement the same scenarios described in the [Demo](./demos/demo.md) and are located in [ClientTests.cs](tests/IntegrationTests/ClientTests.cs).
+They automatically locate your azd environment's `.env` file if available, to retrieve necessary configuration. In the [pipeline](#pipeline) they rely on environment variables set in the workflow.
 
 
 ## Troubleshooting
