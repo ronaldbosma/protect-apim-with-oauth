@@ -2,7 +2,7 @@
 
 name: protect-apim-with-oauth
 metadata:
-  template: protect-apim-with-oauth@0.0.1
+  template: tdd-protect-apim-with-oauth@0.0.1
 hooks:
   postprovision:
     - shell: pwsh
