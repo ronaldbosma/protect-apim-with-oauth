@@ -10,6 +10,7 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
+import { apiManagementSettingsType, appInsightsSettingsType } from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -33,25 +34,25 @@ param instance string = ''
 //=============================================================================
 
 // Determine the instance id based on the provided instance or by generating a new one
-var instanceId = getInstanceId(environmentName, location, instance)
+var instanceId string = getInstanceId(environmentName, location, instance)
 
-var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
+var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = {
+var apiManagementSettings apiManagementSettingsType = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   sku: 'Consumption'
   appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
   appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
 
-var appInsightsSettings = {
+var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
-var validClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
-var invalidClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
+var validClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
+var invalidClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -59,7 +60,7 @@ var keyVaultName string = getResourceName('keyVault', environmentName, location,
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
 var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags = {
+var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/protect-apim-with-oauth'
