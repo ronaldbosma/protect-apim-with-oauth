@@ -11,6 +11,7 @@ This template deploys the following resources:
 
 The template creates an API Management service with an OAuth-protected API. 
 It also deploys three Entra ID app registrations using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension): one app registration that represents the APIs in API Management, one client with 'read' and 'write' permissions and one client with no API access (for testing authorization failures).
+
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes. 
 A Key Vault is also included to securely store client secrets for integration tests.
 

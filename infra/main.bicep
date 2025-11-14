@@ -9,7 +9,8 @@ targetScope = 'subscription'
 // Imports
 //=============================================================================
 
-import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
+import { getResourceName, generateInstanceId } from './functions/naming-conventions.bicep'
+import { apiManagementSettingsType, appInsightsSettingsType } from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -24,35 +25,30 @@ param location string
 @description('The name of the environment to deploy to')
 param environmentName string
 
-@maxLength(5) // The maximum length of the storage account name and key vault name is 24 characters. To prevent errors the instance name should be short.
-@description('The instance that will be added to the deployed resources names to make them unique. Will be generated if not provided.')
-param instance string = ''
-
 //=============================================================================
 // Variables
 //=============================================================================
 
 // Determine the instance id based on the provided instance or by generating a new one
-var instanceId = getInstanceId(environmentName, location, instance)
+var instanceId string = generateInstanceId(environmentName, location)
 
-var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
+var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = {
+var apiManagementSettings apiManagementSettingsType = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
-  publisherName: 'admin@example.org'
-  publisherEmail: 'admin@example.org'
+  sku: 'Consumption'
   appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
   appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
 
-var appInsightsSettings = {
+var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
-var validClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
-var invalidClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
+var validClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
+var invalidClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -60,7 +56,7 @@ var keyVaultName string = getResourceName('keyVault', environmentName, location,
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
 var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags = {
+var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/protect-apim-with-oauth'

@@ -28,9 +28,31 @@ param appInsightsName string
 // Variables
 //=============================================================================
 
-var serviceTags = union(tags, {
+var serviceTags { *: string } = union(tags, {
   'azd-service-name': 'apim'
 })
+
+var publisherName string = 'admin@example.org'
+var publisherEmail string = 'admin@example.org'
+
+// This will disable the specified weak/insecure cipher suites (https://ciphersuite.info/)
+var customProperties resourceInput<'Microsoft.ApiManagement/service@2024-05-01'>.properties.customProperties = {
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TripleDes168': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_256_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_CBC_SHA256': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_256_CBC_SHA256': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_128_GCM_SHA256': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA': 'False'
+  'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Ciphers.TLS_RSA_WITH_AES_256_GCM_SHA384': 'False'
+}
 
 //=============================================================================
 // Existing resources
@@ -44,19 +66,18 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 // Resources
 //=============================================================================
 
-// API Management - Consumption tier (see also: https://learn.microsoft.com/en-us/azure/api-management/quickstart-bicep?tabs=CLI)
-
 resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
   sku: {
-    name: 'Consumption'
-    capacity: 0
+    name: apiManagementSettings.sku
+    capacity: apiManagementSettings.sku == 'Consumption' ? 0 : 1
   }
   properties: {
-    publisherName: apiManagementSettings.publisherName
-    publisherEmail: apiManagementSettings.publisherEmail
+    publisherName: publisherName
+    publisherEmail: publisherEmail
+    customProperties: contains(apiManagementSettings.sku, 'Consumption') ? null : customProperties
   }
   identity: {
     type: 'SystemAssigned'
