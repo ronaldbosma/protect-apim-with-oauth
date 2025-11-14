@@ -84,6 +84,7 @@ function Add-ClientSecretToKeyVault {
             --id $AppId `
             --display-name $SecretDisplayName `
             --query "password" `
+            --append `
             --output tsv
 
         if ($LASTEXITCODE -ne 0) {
