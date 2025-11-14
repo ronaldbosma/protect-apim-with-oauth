@@ -15,7 +15,6 @@ on:
       - '.github/workflows/azure-dev.yml'
       - 'hooks/**'
       - 'infra/**'
-      - 'src/**'
       - 'tests/IntegrationTests/**'
       - 'azure.yaml'
       - 'bicepconfig.json'
@@ -118,6 +117,10 @@ jobs:
       AZURE_ENV_ID: ${{ steps.get-outputs.outputs.AZURE_ENV_ID }}
       AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+      AZURE_KEY_VAULT_URI: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_URI }}
+      ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ steps.get-outputs.outputs.ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
+      ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ steps.get-outputs.outputs.ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
+      ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ steps.get-outputs.outputs.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI }}
 
     steps:
     - name: Checkout code
@@ -156,7 +159,11 @@ jobs:
         $variableNames = @(
           "AZURE_ENV_ID",
           "AZURE_RESOURCE_GROUP",
-          "AZURE_API_MANAGEMENT_GATEWAY_URL"
+          "AZURE_API_MANAGEMENT_GATEWAY_URL",
+          "AZURE_KEY_VAULT_URI",
+          "ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID",
+          "ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID",
+          "ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI"
         )
         .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames $variableNames
 
@@ -199,7 +206,12 @@ jobs:
       working-directory: ./
       env:
         # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+        AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
         AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+        AZURE_KEY_VAULT_URI: ${{ needs.deploy.outputs.AZURE_KEY_VAULT_URI }}
+        ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ needs.deploy.outputs.ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
+        ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ needs.deploy.outputs.ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
+        ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ needs.deploy.outputs.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI }}
 
     - name: Upload Test Results
       if: always()
