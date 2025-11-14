@@ -54,8 +54,15 @@ var appInsightsSettings = {
 var validClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
 var invalidClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
 
+var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
+
+// Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
+// The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
+var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
+
 var tags = {
   'azd-env-name': environmentName
+  'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/protect-apim-with-oauth'
 
   // The SecurityControl tag is added to Trainer Demo Deploy projects so resources can run in MTT managed subscriptions without being blocked by default security policies.
@@ -140,6 +147,27 @@ module apiManagement 'modules/services/api-management.bicep' = {
   ]
 }
 
+module keyVault 'modules/services/key-vault.bicep' = {
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    keyVaultName: keyVaultName
+  }
+}
+
+module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
+  scope: resourceGroup
+  params: {
+    principalId: deployer().objectId
+    isAdmin: true
+    keyVaultName: keyVaultName
+  }
+  dependsOn: [
+    keyVault
+  ]
+}
+
 //=============================================================================
 // Application Resources
 //=============================================================================
@@ -160,6 +188,12 @@ module protectedApi 'modules/application/protected-api.bicep' = {
 // Outputs
 //=============================================================================
 
+// Return the Azure tenant id so it is available in the .env file and can be used in e.g. the integration tests
+output AZURE_TENANT_ID string = subscription().tenantId
+
+// Return the azd environment id
+output AZURE_ENV_ID string = azdEnvironmentId
+
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
@@ -171,5 +205,10 @@ output ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID string = invalidClient
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
+output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
 output AZURE_RESOURCE_GROUP string = resourceGroupName
+
+// Return resource endpoints
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
