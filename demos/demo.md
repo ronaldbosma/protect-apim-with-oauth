@@ -49,7 +49,9 @@ Keep track of these values because you'll need them later.
 
 7. In the left-hand menu, select `Certificates & secrets`.
 
-8. Under `Client secrets`, click on `New client secret`.
+8. Under `Client secrets`, click on `New client secret`.  
+ 
+    > **Note:** There should already be a client secret present that was generated during deployment and stored in Key Vault. This secret is used by the integration tests. You can retrieve its value from Key Vault if needed, or create a new one.
 
 9. Add a description and set an expiration period for the secret.
 
