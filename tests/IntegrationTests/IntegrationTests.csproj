@@ -20,6 +20,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.10" />
+    <PackageReference Include="Microsoft.Identity.Client" Version="4.79.1" />
   </ItemGroup>
   
 </Project>
