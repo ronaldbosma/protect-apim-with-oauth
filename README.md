@@ -119,6 +119,15 @@ The repository consists of the following files and directories:
 
 This template has several hooks that are executed at different stages of the deployment process. The following hooks are included:
 
+### Post-provision hooks
+
+These PowerShell scripts are executed after the infrastructure resources are provisioned.
+
+- [postprovision-create-and-store-client-secrets.ps1](hooks/postprovision-create-and-store-client-secrets.ps1): 
+  Currently, we can't create secrets for an app registration with Bicep.
+  This script creates a client secret for each client app registrations in Entra ID and stores it securely in Azure Key Vault. 
+  If the secret for a client already exists in Key Vault, it won't create a new one.
+
 ### Pre-down hooks
 
 These PowerShell scripts are executed before the resources are removed.
