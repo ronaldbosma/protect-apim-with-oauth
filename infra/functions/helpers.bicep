@@ -33,3 +33,9 @@ func getTableStorageEndpoint(storageAccountName string) string => 'https://${sto
 
 @export()
 func flattenTags(tags { *: string }) string[] => map(items(tags), tag => '${tag.key}: ${tag.value}')
+
+// Service Management Reference
+
+@export()
+func getServiceManagementReference(tags { *: string }) string => 
+  'Deployer: ${deployer().?userPrincipalName ?? deployer().objectId} | azd-env-name: ${tags['azd-env-name']}'
