@@ -32,6 +32,9 @@ param name string
 @description('The identifier URI for the API Management app registration')
 param identifierUri string
 
+@description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
+param serviceManagementReference string?
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -81,6 +84,10 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   
   // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
   tags: concat(helpers.flattenTags(tags), ['HideApp'])
+
+  // The service management reference is required for tenants with Entra IDs enabled by Service Tree management 
+  // and must be a valid Service Tree ID in this case
+  serviceManagementReference: serviceManagementReference
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
