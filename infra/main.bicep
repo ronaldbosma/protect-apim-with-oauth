@@ -26,7 +26,7 @@ param location string
 param environmentName string
 
 @description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
-param serviceManagementReference string?
+param serviceManagementReference string = ''
 
 //=============================================================================
 // Variables

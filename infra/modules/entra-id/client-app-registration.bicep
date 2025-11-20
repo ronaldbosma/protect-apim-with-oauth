@@ -27,7 +27,7 @@ param tags object
 param name string
 
 @description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must in this case be a valid Service Tree ID in this case.')
-param serviceManagementReference string?
+param serviceManagementReference string
 
 //=============================================================================
 // Resources
@@ -42,7 +42,7 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   // The service management reference is required for tenants with Entra IDs enabled by Service Tree management 
   // and must be a valid Service Tree ID in this case
-  serviceManagementReference: serviceManagementReference
+  serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {

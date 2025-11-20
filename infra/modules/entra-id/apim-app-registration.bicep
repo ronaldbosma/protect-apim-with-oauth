@@ -33,7 +33,7 @@ param name string
 param identifierUri string
 
 @description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
-param serviceManagementReference string?
+param serviceManagementReference string
 
 //=============================================================================
 // Variables
@@ -87,7 +87,7 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   // The service management reference is required for tenants with Entra IDs enabled by Service Tree management 
   // and must be a valid Service Tree ID in this case
-  serviceManagementReference: serviceManagementReference
+  serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
