@@ -40,7 +40,7 @@ Before you can deploy this template, make sure you have the following tools inst
   - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
 
 **Required Permissions:**
-- You need **Owner** or **Contributor** permissions on an Azure Subscription to deploy this template.  
+- You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
 
