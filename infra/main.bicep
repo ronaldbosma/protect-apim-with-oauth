@@ -114,6 +114,7 @@ module invalidClientAppRegistration 'modules/entra-id/client-app-registration.bi
   params: {
     tags: tags
     name: invalidClientAppRegistrationName
+    serviceManagementReference: serviceManagementReference
   }
   dependsOn: [
     apimAppRegistration
