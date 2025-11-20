@@ -226,8 +226,7 @@ Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azur
 az apim deletedservice purge --location "swedencentral" --service-name "apim-oauth-sdc-wiyuo"
 ```
 
-
-### Deployment fails with: `BadRequest: Value for ServiceManagementReference must be a valid GUID`
+### Deployment fails with BadRequest: Value for ServiceManagementReference must be a valid GUID
 
 In an enterprise environment (for tenants with Entra IDs enabled by Service Tree management), the `ServiceManagementReference` field on an application (app registration) is mandatory.
 If you're deploying this template in such an environment, you may encounter the following error during deployment:
