@@ -81,9 +81,6 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   
   // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
   tags: concat(helpers.flattenTags(tags), ['HideApp'])
-
-  // Some tenants require a service management reference to be set
-  serviceManagementReference: helpers.getServiceManagementReference(tags)
 }
 
 resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
