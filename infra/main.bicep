@@ -32,7 +32,7 @@ param serviceManagementReference string = ''
 // Variables
 //=============================================================================
 
-// Determine the instance id based on the provided instance or by generating a new one
+// Generate an instance ID to ensure unique resource names
 var instanceId string = generateInstanceId(environmentName, location)
 
 var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
