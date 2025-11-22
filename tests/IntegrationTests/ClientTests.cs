@@ -72,7 +72,7 @@ public sealed class ClientTests
         // Get access token using MSAL
         var act = async () => await app.AcquireTokenForClient([$"{config.OAuthTargetResource}/.default"]).ExecuteAsync();
 
-        // Assert that the correct exception is returned indicating that the client does n
+        // Assert that the correct exception is returned indicating that the client does not have access
         var exception = await Assert.ThrowsExactlyAsync<MsalUiRequiredException>(act);
         Assert.AreEqual("invalid_grant", exception.ErrorCode, "Unexpected error code");
         Assert.AreEqual(400, exception.StatusCode, "Unexpected status code");
