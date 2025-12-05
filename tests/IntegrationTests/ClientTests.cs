@@ -78,4 +78,28 @@ public sealed class ClientTests
         Assert.AreEqual(400, exception.StatusCode, "Unexpected status code");
         StringAssert.Contains(exception.Message, "is not assigned to a role for the application", "Unexpected exception message");
     }
+
+    /// <summary>
+    /// Tests that a 401 Unauthorized is returned if no Authorization is provided when calling the Protected API.
+    /// </summary>
+    [TestMethod]
+    public async Task CallProtectedApiWithoutAuthorizationHeader()
+    {
+        var config = TestConfiguration.Load();
+
+        var apimClient = new IntegrationTestHttpClient(config.AzureApiManagementGatewayUrl);
+        apimClient.DefaultRequestHeaders.Authorization = null;
+
+        // Call GET on Protected API with token and assert that a 401 Unauthorized is returned
+        var getResponse = await apimClient.GetAsync("protected");
+        Assert.AreEqual(HttpStatusCode.Unauthorized, getResponse.StatusCode, "Unexpected status code returned");
+
+        // Call POST on Protected API with token and assert that a 401 Unauthorized is returned
+        var postResponse = await apimClient.PostAsync("protected", null);
+        Assert.AreEqual(HttpStatusCode.Unauthorized, postResponse.StatusCode, "Unexpected status code returned");
+
+        // Call DELETE on Protected API with token and assert that a 401 Unauthorized is returned
+        var deleteResponse = await apimClient.DeleteAsync("protected");
+        Assert.AreEqual(HttpStatusCode.Unauthorized, deleteResponse.StatusCode, "Unexpected status code returned");
+    }
 }
