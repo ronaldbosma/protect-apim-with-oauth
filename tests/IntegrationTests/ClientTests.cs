@@ -18,7 +18,7 @@ public sealed class ClientTests
     /// requests return 401 Unauthorized as expected.
     /// </summary>
     [TestMethod]
-    public async Task RetrieveAccessTokenForValidClientAndCallPortectedApi()
+    public async Task RetrieveAccessTokenForValidClientAndCallProtectedApi()
     {
         var config = TestConfiguration.Load();
 
@@ -54,7 +54,7 @@ public sealed class ClientTests
     /// Tests that an invalid unauthorized client cannot retrieve an access token from Entra ID.
     /// </summary>
     [TestMethod]
-    public async Task RetrieveAccessTokenForInvalidClientAndCallPortectedApi()
+    public async Task RetrieveAccessTokenForInvalidClientAndCallProtectedApi()
     {
         var config = TestConfiguration.Load();
 
