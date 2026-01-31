@@ -116,7 +116,6 @@ jobs:
 
     outputs:
       AZURE_ENV_ID: ${{ steps.get-outputs.outputs.AZURE_ENV_ID }}
-      AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
       AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
       AZURE_KEY_VAULT_URI: ${{ steps.get-outputs.outputs.AZURE_KEY_VAULT_URI }}
       ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ steps.get-outputs.outputs.ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
@@ -153,7 +152,6 @@ jobs:
       run: |
         $variableNames = @(
           "AZURE_ENV_ID",
-          "AZURE_RESOURCE_GROUP",
           "AZURE_API_MANAGEMENT_GATEWAY_URL",
           "AZURE_KEY_VAULT_URI",
           "ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID",
@@ -258,4 +256,3 @@ jobs:
         # Pass the deployed resource identifiers as environment variables so azd hooks can access them
         # during cleanup operations (e.g., for custom resource deletion or additional cleanup tasks).
         AZURE_ENV_ID: ${{ needs.deploy.outputs.AZURE_ENV_ID }}
-        AZURE_RESOURCE_GROUP: ${{ needs.deploy.outputs.AZURE_RESOURCE_GROUP }}
