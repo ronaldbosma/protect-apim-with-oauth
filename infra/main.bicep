@@ -143,6 +143,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    keyVaultName: keyVaultName
   }
   dependsOn: [
     appInsights
@@ -163,9 +164,11 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
   params: {
     principalId: deployer().objectId
     isAdmin: true
+    appInsightsName: appInsightsSettings.appInsightsName
     keyVaultName: keyVaultName
   }
   dependsOn: [
+    appInsights
     keyVault
   ]
 }

@@ -24,6 +24,9 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
+@description('The name of the Key Vault that will contain the secrets')
+param keyVaultName string
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -84,6 +87,16 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-previe
   }
 }
 
+// Assign roles to system-assigned identity of API Management
+
+module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  params: {
+    principalId: apiManagementService.identity.principalId
+    principalType: 'ServicePrincipal'
+    appInsightsName: appInsightsName
+    keyVaultName: keyVaultName
+  }
+}
 
 // Store the app insights connection string in a named value
 
@@ -110,6 +123,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-
       // If we would reference the connection string directly using appInsights.properties.ConnectionString,
       // a new named value is created every time we execute a deployment
       connectionString: '{{${appInsightsConnectionStringNamedValue.properties.displayName}}}'
+      identityClientId: 'SystemAssigned'
     }
     resourceId: appInsights.id
   }
