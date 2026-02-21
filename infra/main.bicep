@@ -168,6 +168,7 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
     keyVaultName: keyVaultName
   }
   dependsOn: [
+    appInsights
     keyVault
   ]
 }
