@@ -109,7 +109,6 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
   }
 }
 
-
 // Configure API Management to log to App Insights
 // - we need a logger that is connected to the App Insights instance
 // - we need diagnostics settings that specify what to log to the logger
