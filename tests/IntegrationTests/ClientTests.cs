@@ -1,8 +1,10 @@
-﻿using IntegrationTests.Clients;
-using IntegrationTests.Configuration;
-using Microsoft.Identity.Client;
 using System.Net;
 using System.Net.Http.Headers;
+
+using IntegrationTests.Clients;
+using IntegrationTests.Configuration;
+
+using Microsoft.Identity.Client;
 
 namespace IntegrationTests;
 

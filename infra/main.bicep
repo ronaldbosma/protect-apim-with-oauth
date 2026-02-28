@@ -50,8 +50,18 @@ var appInsightsSettings appInsightsSettingsType = {
   retentionInDays: 30
 }
 
-var validClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
-var invalidClientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'invalidclient-${instanceId}')
+var validClientAppRegistrationName string = getResourceName(
+  'appRegistration',
+  environmentName,
+  location,
+  'validclient-${instanceId}'
+)
+var invalidClientAppRegistrationName string = getResourceName(
+  'appRegistration',
+  environmentName,
+  location,
+  'invalidclient-${instanceId}'
+)
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -105,7 +115,7 @@ module assignAppRolesToValidClient 'modules/entra-id/assign-app-roles.bicep' = {
     validClientAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
-    apiManagement 
+    apiManagement
   ]
 }
 

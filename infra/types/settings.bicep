@@ -19,7 +19,6 @@ type apiManagementSettingsType = {
   appRegistrationIdentifierUri: string
 }
 
-
 // Application Insights
 
 @description('Retention options for Application Insights')
