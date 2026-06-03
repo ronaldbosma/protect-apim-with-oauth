@@ -63,6 +63,13 @@ var invalidClientAppRegistrationName string = getResourceName(
   'invalidclient-${instanceId}'
 )
 
+var scriptClientAppRegistrationName string = getResourceName(
+  'appRegistration',
+  environmentName,
+  location,
+  'scriptclient-${instanceId}'
+)
+
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
 // Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
@@ -124,6 +131,17 @@ module invalidClientAppRegistration 'modules/entra-id/client-app-registration.bi
   params: {
     tags: tags
     name: invalidClientAppRegistrationName
+    serviceManagementReference: serviceManagementReference
+  }
+  dependsOn: [
+    apimAppRegistration
+  ]
+}
+
+module scriptClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+  params: {
+    tags: tags
+    name: scriptClientAppRegistrationName
     serviceManagementReference: serviceManagementReference
   }
   dependsOn: [
