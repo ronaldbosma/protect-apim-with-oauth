@@ -149,6 +149,20 @@ module postmanClientAppRegistration 'modules/entra-id/client-app-registration.bi
   ]
 }
 
+module assignPostmanAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
+  params: {
+    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    clientAppRegistrationName: postmanClientAppRegistrationName
+  }
+  dependsOn: [
+    apimAppRegistration
+    postmanClientAppRegistration
+    // Assignment of the app roles fails if we do this immediately after creating the app registrations.
+    // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
+    apiManagement
+  ]
+}
+
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2025-04-01' = {
   name: resourceGroupName
   location: location
