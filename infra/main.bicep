@@ -63,11 +63,11 @@ var invalidClientAppRegistrationName string = getResourceName(
   'invalidclient-${instanceId}'
 )
 
-var scriptClientAppRegistrationName string = getResourceName(
+var postmanClientAppRegistrationName string = getResourceName(
   'appRegistration',
   environmentName,
   location,
-  'scriptclient-${instanceId}'
+  'postmanclient-${instanceId}'
 )
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
@@ -138,10 +138,10 @@ module invalidClientAppRegistration 'modules/entra-id/client-app-registration.bi
   ]
 }
 
-module scriptClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+module postmanClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
   params: {
     tags: tags
-    name: scriptClientAppRegistrationName
+    name: postmanClientAppRegistrationName
     serviceManagementReference: serviceManagementReference
   }
   dependsOn: [
