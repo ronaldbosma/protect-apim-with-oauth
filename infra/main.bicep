@@ -63,13 +63,6 @@ var invalidClientAppRegistrationName string = getResourceName(
   'invalidclient-${instanceId}'
 )
 
-var postmanClientAppRegistrationName string = getResourceName(
-  'appRegistration',
-  environmentName,
-  location,
-  'postmanclient-${instanceId}'
-)
-
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
 // Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
@@ -138,17 +131,6 @@ module invalidClientAppRegistration 'modules/entra-id/client-app-registration.bi
   ]
 }
 
-module postmanClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
-  params: {
-    tags: tags
-    name: postmanClientAppRegistrationName
-    serviceManagementReference: serviceManagementReference
-  }
-  dependsOn: [
-    apimAppRegistration
-  ]
-}
-
 module assignPostmanAppRoles 'modules/entra-id/assign-app-roles-to-group.bicep' = {
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
@@ -156,7 +138,6 @@ module assignPostmanAppRoles 'modules/entra-id/assign-app-roles-to-group.bicep' 
   }
   dependsOn: [
     apimAppRegistration
-    postmanClientAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement
