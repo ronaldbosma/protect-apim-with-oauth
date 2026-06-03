@@ -71,6 +71,13 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   identifierUris: [identifierUri]
 
+  // Redirect back to Postman after successful authentication
+  publicClient: {
+    redirectUris: [
+      'https://oauth.pstmn.io/v1/callback'
+    ]
+  }
+
   api: {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
 
