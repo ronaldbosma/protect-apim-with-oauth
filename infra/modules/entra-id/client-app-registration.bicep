@@ -37,13 +37,6 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   uniqueName: name
   displayName: name
 
-  // Redirect back to Postman after successful authentication
-  publicClient: {
-    redirectUris: [
-      'https://oauth.pstmn.io/v1/callback'
-    ]
-  }
-
   // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
   tags: concat(helpers.flattenTags(tags), ['HideApp'])
 
