@@ -149,10 +149,10 @@ module postmanClientAppRegistration 'modules/entra-id/client-app-registration.bi
   ]
 }
 
-module assignPostmanAppRoles 'modules/entra-id/assign-app-roles.bicep' = {
+module assignPostmanAppRoles 'modules/entra-id/assign-app-roles-to-group.bicep' = {
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
-    clientAppRegistrationName: postmanClientAppRegistrationName
+    groupId: '...'
   }
   dependsOn: [
     apimAppRegistration
