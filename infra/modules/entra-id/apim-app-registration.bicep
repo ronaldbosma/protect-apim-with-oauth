@@ -59,6 +59,8 @@ var appRoles appRoleType[] = [
   }
 ]
 
+var apiAccessScope string = 'API.Access'
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -71,6 +73,20 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   api: {
     requestedAccessTokenVersion: 2 // Issue OAuth v2.0 access tokens
+
+    // Add OAuth2 permission scope so users can request an access token to access the API, if allowApiAccessForUsers is true
+    oauth2PermissionScopes: [
+      {
+        id: guid(tenantId, name, apiAccessScope)
+        adminConsentDescription: 'Allows API access for users'
+        adminConsentDisplayName: apiAccessScope
+        isEnabled: true
+        type: 'User'
+        userConsentDescription: null
+        userConsentDisplayName: null
+        value: apiAccessScope
+      }
+    ]
   }
 
   appRoles: [
