@@ -11,6 +11,7 @@ targetScope = 'subscription'
 
 import { getResourceName, generateInstanceId } from './functions/naming-conventions.bicep'
 import { apiManagementSettingsType, appInsightsSettingsType } from './types/settings.bicep'
+import { tagsType } from './types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
@@ -69,7 +70,7 @@ var keyVaultName string = getResourceName('keyVault', environmentName, location,
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
 var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags { *: string } = {
+var tags tagsType = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/protect-apim-with-oauth'
