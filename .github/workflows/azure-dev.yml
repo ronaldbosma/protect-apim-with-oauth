@@ -77,7 +77,7 @@ jobs:
 
       - name: Bicep Lint
         run: |
-          az bicep lint --file ./infra/main.bicep
+          az bicep lint --file ./infra/main.bicepparam
 
       - name: Validate Template
         run: |
