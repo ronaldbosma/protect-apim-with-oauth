@@ -21,6 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="11.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="11.0.0" />
     <PackageReference Include="Microsoft.Identity.Client" Version="4.92.0" />
+    <PackageReference Include="Microsoft.Testing.Extensions.GitHubActionsReport" Version="2.5.3" />
   </ItemGroup>
 
 </Project>
