@@ -7,16 +7,7 @@ namespace IntegrationTests.Configuration;
 /// </summary>
 internal class TestConfiguration
 {
-    public required string AzureTenantId { get; init; }
-
-    public required Uri AzureApiManagementGatewayUrl { get; init; }
-    public required Uri AzureKeyVaultUri { get; init; }
-
-    public required string ValidClientId { get; set; }
-    public required string InvalidClientId { get; set; }
-    public required string OAuthTargetResource { get; init; }
-
-    public static TestConfiguration Load()
+    private static readonly Lazy<TestConfiguration> Instance = new(() =>
     {
         AzdDotEnv.Load(optional: true); // Loads Azure Developer CLI environment variables; optional since .env file might be missing in CI/CD pipelines
 
@@ -33,5 +24,16 @@ internal class TestConfiguration
             InvalidClientId = configuration.GetRequiredString("ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID"),
             OAuthTargetResource = configuration.GetRequiredString("ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI")
         };
-    }
+    });
+
+    public required string AzureTenantId { get; init; }
+
+    public required Uri AzureApiManagementGatewayUrl { get; init; }
+    public required Uri AzureKeyVaultUri { get; init; }
+
+    public required string ValidClientId { get; set; }
+    public required string InvalidClientId { get; set; }
+    public required string OAuthTargetResource { get; init; }
+
+    public static TestConfiguration Load() => Instance.Value;
 }

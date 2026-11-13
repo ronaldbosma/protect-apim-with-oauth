@@ -196,7 +196,7 @@ jobs:
 
       - name: Run Integration Tests
         run: |
-          dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+          dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-gh
         working-directory: ./
         env:
           # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
@@ -206,14 +206,6 @@ jobs:
           ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ needs.deploy.outputs.ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
           ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID: ${{ needs.deploy.outputs.ENTRA_ID_INVALID_CLIENT_APP_REGISTRATION_CLIENT_ID }}
           ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI: ${{ needs.deploy.outputs.ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI }}
-
-      - name: Upload Test Results
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: integration-test-results
-          path: ./artifacts/integration-tests/TestResults/
-          retention-days: 1
 
   # ------------------------------------------------------------
   # Clean Up Resources
